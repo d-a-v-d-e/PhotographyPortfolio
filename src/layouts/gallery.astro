@@ -13,7 +13,12 @@ const{title} = Astro.props
     <body>
         <Header />
         <h1>{title}</h1>
-        <slot name="foto" />
+        <div class="ph_content">
+            <a class="ca-next"></a>
+            <a class="ca-prev"></a>
+            <slot name="foto" />
 
-        <slot />
+            <slot />
+        </div>
     </body>
+</html>
