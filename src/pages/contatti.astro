@@ -1,0 +1,35 @@
+---
+import Gallery from "../layouts/gallery.astro";
+import NoRightClick from '../components/no_right_click.astro'
+import Header from "../components/header.astro";
+import Footer from "../components/footer.astro";
+---
+
+<html lang="it">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contatti</title>
+    <style>
+        body {
+            background-image: url('/contatti_bg.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+
+        }
+    </style>
+</head>
+<body>
+    <Header />
+    <div class="contatti">
+        <a href= "https://www.instagram.com/nico.bonannoo?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank">
+            <img src="/instagram.png" alt="Instagram" width="50" height="50">@nico.bonannoo</a><br>
+        <a href="" data-link-type="mailto">
+            <img src="/email.png" alt="E-mail" width="50" height="50">nicolabonannofoto@gmail.com</a>
+
+    </div>
+    <Footer />
+</body>
+</html>

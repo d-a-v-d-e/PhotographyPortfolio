@@ -1,0 +1,30 @@
+---
+import Gallery from "../layouts/gallery.astro";
+import NoRightClick from '../components/no_right_click.astro'
+
+
+---
+<html lang="it">
+<NoRightClick />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edited</title>
+</head>
+<body>
+
+<Gallery title="Edited">
+    <Fragment slot="foto">
+
+        <div class="card-categorie">
+            <div class="image-primo-piano">
+                <a href=""> <img src="" alt="Foto a colori" width="400" height="500"></a>
+            </div>
+            <a href="">sss</a>
+        </div>
+
+
+    </Fragment>
+</Gallery>
+</body>
+</html>

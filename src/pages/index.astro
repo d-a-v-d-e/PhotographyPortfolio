@@ -1,11 +1,16 @@
 ---
 import Header from '../components/header.astro';
+import Footer from "../components/footer.astro";
+import NoRightClick from '../components/no_right_click.astro'
 ---
 <html lang="it">
+<NoRightClick />
     <head>
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Nicola Bonanno</title>
+        <link rel="icon" type="image/x-icon" href="public/favicon.ico">
         <style>
             .home {
                 background-image: url('/indexbgimg2.JPG');
@@ -16,6 +21,7 @@ import Header from '../components/header.astro';
         </style>
     </head>
         <body>
+
           <section class="home">
 
             <Header />
@@ -42,26 +48,26 @@ import Header from '../components/header.astro';
 
                   <div class="card-categorie">
                       <div class="image-primo-piano">
-                          <a href=""> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
+                          <a href="/f_b&w"> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
                       </div>
                       <a href="">Bianco e nero</a>
                   </div>
 
                   <div class="card-categorie">
                       <div class="image-primo-piano">
-                          <a href=""> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
+                          <a href="/f_concepts"> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
                       </div>
                       <a href="">Concept</a>
                   </div>
 
                   <div class="card-categorie">
                       <div class="image-primo-piano">
-                          <a href=""> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
+                          <a href="/f_edited"> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
                       </div>
                       <a href="">non lo so ancora</a>
                   </div>
               </div>
           </section>
-
+            <Footer />
         </body>
 </html>
