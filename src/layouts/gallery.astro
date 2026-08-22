@@ -1,0 +1,19 @@
+---
+import Header from "../components/header.astro";
+interface Props {
+	title: string;
+}
+const{title} = Astro.props
+---
+
+<html lang="it">
+    <head>
+        <title>{title}</title>
+    </head>
+    <body>
+        <Header />
+        <h1>{title}</h1>
+        <slot name="foto" />
+
+        <slot />
+    </body>

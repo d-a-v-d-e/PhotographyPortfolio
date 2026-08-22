@@ -1,11 +1,67 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Header from '../components/header.astro';
 ---
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nicola Bonanno</title>
+        <style>
+            .home {
+                background-image: url('/indexbgimg2.JPG');
+                background-size: cover;
+                background-repeat: no-repeat;
 
-<Layout>
-	<Welcome />
-</Layout>
+            }
+        </style>
+    </head>
+        <body>
+          <section class="home">
+
+            <Header />
+            <h3>Fotografo</h3>
+            <div class="forward"><a href="#categorie"></a></div>
+              <style> section .forward a::before{
+                  content: url(/icons8-freccia-espandi-52.png);
+              }</style>
+          </section>
+          <div class="background-color"></div>
+          <section class="categorie" id="categorie">
+              <h3 class="categorie-title">Categorie</h3>
+
+              <div class="content">
+                  <a class="ca-next"></a>
+                  <a class="ca-prev"></a>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href=""> <img src="/categorie/colors.jpg" alt="Foto a colori" width="400" height="500"></a>
+                      </div>
+                      <a href="">colori</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href=""> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
+                      </div>
+                      <a href="">Bianco e nero</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href=""> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
+                      </div>
+                      <a href="">Concept</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href=""> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
+                      </div>
+                      <a href="">non lo so ancora</a>
+                  </div>
+              </div>
+          </section>
+
+        </body>
+</html>
