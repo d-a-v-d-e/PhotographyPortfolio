@@ -1,7 +1,28 @@
-<header>
+---
+const isHome = Astro.url.pathname === '/';
+---
+
+<header class:list={['site-header', { 'site-header--home': isHome }]} id="site-header">
     <nav>
-        <a href="/">Nico Bonanno</a>
-        <ul>
+        <div class="site-brand">
+            <a href="/" class="site-name">Nico Bonanno</a>
+            {isHome && <span class="site-subtitle">Fotografo</span>}
+        </div>
+
+        <button
+                type="button"
+                class="nav-toggle"
+                id="nav-toggle"
+                aria-expanded="false"
+                aria-controls="site-nav"
+                aria-label="Apri il menu"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <ul id="site-nav">
             <li><a href="/#categorie">Work</a></li>
             <li><a href="/about">About</a></li>
             <li><a href="/contatti">Contatti</a></li>
@@ -9,42 +30,71 @@
     </nav>
 </header>
 
-<style>
-    header {
-        display: flex;
-        align-items: center;
-        padding: 1.5rem 2rem;
-    }
+<script>
+    const header = document.getElementById('site-header');
+    const toggle = document.getElementById('nav-toggle');
+    const nav = document.getElementById('site-nav');
 
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-    }
+    if (header && toggle && nav) {
+        const closeMenu = () => {
+            header.classList.remove('nav-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        };
 
-    nav > a {
-        font-weight: 600;
-        text-decoration: none;
-        color: inherit;
-    }
+        const openMenu = () => {
+            header.classList.add('nav-open');
+            toggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        };
 
-    ul {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
+        const toggleMenu = () => {
+            if (header.classList.contains('nav-open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        };
 
-    li a {
-        text-decoration: none;
-        color: inherit;
-        font-size: 0.95rem;
-        letter-spacing: 0.02em;
-    }
+        toggle.addEventListener('click', toggleMenu);
 
-    li a:hover {
-        opacity: 0.6;
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') closeMenu();
+        });
+
+        nav.querySelectorAll('a').forEach((link) => {
+            link.addEventListener('click', closeMenu);
+        });
     }
-</style>
+</script>
+
+{isHome && (
+<script>
+    const header = document.getElementById('site-header');
+
+    if (header) {
+        // 0 = in cima alla pagina, 1 = a metà dell'altezza scrollabile
+        const update = () => {
+            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            const target = scrollable * 0.5;
+            const progress = target > 0 ? Math.min(window.scrollY / target, 1) : 1;
+            header.style.setProperty('--shrink', progress.toFixed(3));
+        };
+
+        let ticking = false;
+        const onScroll = () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    update();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        update();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', update);
+    }
+</script>
+    )}
