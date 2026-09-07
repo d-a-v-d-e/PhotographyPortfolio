@@ -1,4 +1,8 @@
-
+/* =========================================================
+   Nicola Bonanno — Portfolio fotografico
+   Palette e tipografia ispirate alla camera oscura:
+   nero caldo, luce di sicurezza ambrata, fotogrammi 35mm.
+   ========================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
@@ -28,6 +32,7 @@
     --space-5: 7rem;
 }
 
+/* ---------- Reset di base ---------- */
 *,
 *::before,
 *::after {
@@ -78,7 +83,12 @@ button:focus-visible {
     outline-offset: 3px;
 }
 
-
+/* =========================================================
+   HEADER
+   --shrink va da 0 (in cima alla pagina) a 1 (a metà pagina
+   circa): valore impostato via JS in Header.astro, solo
+   nella home. Nelle altre pagine il nome resta sempre piccolo.
+   ========================================================= */
 
 .site-header {
     --shrink: 0;
@@ -92,18 +102,29 @@ button:focus-visible {
     z-index: 50;
     padding: var(--space-2) var(--space-4);
     background: rgba(11, 10, 9, calc(var(--shrink) * 0.85));
-    border-bottom: 1px solid rgba(239, 235, 228, calc(var(--shrink) * 0.14));
     -webkit-backdrop-filter: blur(calc(var(--shrink) * 10px));
     backdrop-filter: blur(calc(var(--shrink) * 10px));
     color: var(--fg);
     transition: background 0.15s linear, border-color 0.15s linear;
 }
 
-
+/* Solo in home: il testo parte nero (sopra la foto chiara)
+   e diventa bianco man mano che si scorre verso il resto
+   della pagina (sfondo scuro) */
 .site-header--home {
     color: black; /* fallback per browser senza color-mix() */
     color: color-mix(in srgb, white calc(var(--shrink) * 100%), black);
     transition: color 0.15s linear, background 0.15s linear, border-color 0.15s linear;
+}
+
+/* Nelle altre pagine l'header è statico: niente scroll, niente
+   transition, sempre come appare a metà pagina in home
+   (sfondo scuro pieno, testo bianco) */
+.site-header:not(.site-header--home) {
+    background: rgba(11, 10, 9, 0.85);
+
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .site-header nav {
@@ -121,16 +142,18 @@ button:focus-visible {
     flex-direction: column;
 }
 
-
+/* "Fotografo", sempre sotto al nome, non linkabile (è uno span).
+   Posizione assoluta: non sposta il layout dell'header mentre
+   il nome cambia dimensione con lo scroll. */
 .site-subtitle {
     position: absolute;
-    left: 1.4rem;
-    top: 100%;
+    left: 0rem;
+    top: 70%;
     margin-top: -0.35rem;
     font-family: var(--font-display);
     font-style: normal;
     font-weight: 400;
-    font-size: 1.05rem;
+    font-size: 1.50rem;
     letter-spacing: 0.01em;
     white-space: nowrap;
     opacity: calc(1 - var(--shrink));
@@ -148,7 +171,7 @@ button:focus-visible {
     white-space: nowrap;
 }
 
-
+/* Solo in home: il nome parte grande e si restringe con lo scroll */
 .site-header--home .site-name {
     font-size: calc(
             var(--name-min) + (var(--name-max) - var(--name-min)) * (1 - var(--shrink))
@@ -178,6 +201,7 @@ button:focus-visible {
     color: var(--accent);
 }
 
+/* ---------- Pulsante hamburger (solo mobile) ---------- */
 .nav-toggle {
     display: none;
     flex-direction: column;
@@ -191,6 +215,7 @@ button:focus-visible {
     background: transparent;
     color: inherit;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .nav-toggle span {
@@ -213,7 +238,9 @@ button:focus-visible {
     width: 100%;
 }
 
-
+/* Contenuto delle pagine interne: evita che il testo finisca
+   sotto l'header fisso (nella home non serve, l'header è
+   trasparente sopra la foto a tutta pagina) */
 body:not(:has(.home)) main,
 body:not(:has(.home)) > section:first-of-type {
     padding-top: 5rem;
@@ -235,6 +262,9 @@ body:not(:has(.home)) > section:first-of-type {
         z-index: 2;
     }
 
+    /* Il nome resta sempre "fixed" (aperto o chiuso) così lo
+       spostamento verso il centro è un semplice transform
+       animabile, non un salto tra due modalità di posizionamento */
     .site-brand {
         position: fixed;
         top: var(--space-2);
@@ -245,7 +275,12 @@ body:not(:has(.home)) > section:first-of-type {
     }
 
     .site-header.nav-open .site-brand {
+        /* centra il proprio bordo sinistro sul centro dello schermo */
         transform: translateX(calc(50vw - var(--space-2) - 50%));
+        color: var(--fg);
+    }
+
+    .site-header.nav-open .nav-toggle {
         color: var(--fg);
     }
 
@@ -253,6 +288,7 @@ body:not(:has(.home)) > section:first-of-type {
         display: none;
     }
 
+    /* Overlay a schermo intero, sfondo scuro pieno (non trasparente) */
     .site-header ul {
         position: fixed;
         inset: 0;
@@ -304,11 +340,13 @@ body:not(:has(.home)) > section:first-of-type {
     }
 }
 
-
+/* =========================================================
+   HERO — .home
+   ========================================================= */
 
 .home {
     position: relative;
-    min-height: 100vh;
+    min-height: 100vh; /* fallback per browser senza svh */
     min-height: 100svh;
     display: flex;
     flex-direction: column;
@@ -319,12 +357,17 @@ body:not(:has(.home)) > section:first-of-type {
     background-position: center 35%;
 }
 
+/* Su schermi stretti (spesso in verticale) l'inquadratura
+   verticale della foto conta di più: la teniamo più in alto
+   per non tagliare il soggetto */
 @media (max-width: 720px) {
     .home {
-        background-position: 77% top;
+        background-position: 80% top;
     }
 }
 
+/* In landscape su mobile, 100vh occuperebbe troppo spazio
+   rispetto all'altezza reale disponibile */
 @media (max-width: 900px) and (max-height: 480px) {
     .home {
         min-height: 100vh;
@@ -333,6 +376,7 @@ body:not(:has(.home)) > section:first-of-type {
     }
 }
 
+/* Velatura per leggibilità sopra la foto */
 .home::before {
     content: '';
     position: absolute;
@@ -346,6 +390,7 @@ body:not(:has(.home)) > section:first-of-type {
     pointer-events: none;
 }
 
+/* ---------- Freccia "scorri" ---------- */
 .forward {
     position: relative;
     display: flex;
@@ -379,7 +424,9 @@ body:not(:has(.home)) > section:first-of-type {
     50% { transform: translateY(6px); }
 }
 
-
+/* =========================================================
+   SEZIONE CATEGORIE — contact sheet
+   ========================================================= */
 
 .background-color {
     height: 1px;
@@ -408,9 +455,10 @@ body:not(:has(.home)) > section:first-of-type {
     gap: var(--space-3);
 }
 
-.ca-next,
-.ca-prev {
-    display: none;
+/* ---------- Frecce di navigazione (mobile / carousel) ---------- */
+.categorie .ca-next,
+.categorie .ca-prev {
+    display: none; /* attivale via JS/media query se il layout diventa un carosello */
     position: absolute;
     top: 50%;
     width: 2.5rem;
@@ -420,9 +468,10 @@ body:not(:has(.home)) > section:first-of-type {
     cursor: pointer;
 }
 
-.ca-prev { left: -1.25rem; }
-.ca-next { right: -1.25rem; }
+.categorie .ca-prev { left: -1.25rem; }
+.categorie .ca-next { right: -1.25rem; }
 
+/* ---------- Card / fotogramma ---------- */
 .card-categorie {
     display: flex;
     flex-direction: column;
@@ -437,10 +486,6 @@ body:not(:has(.home)) > section:first-of-type {
     transition: border-color 0.3s ease;
 }
 
-.card-categorie:nth-child(1) .image-primo-piano::after { content: 'N°01'; }
-.card-categorie:nth-child(2) .image-primo-piano::after { content: 'N°02'; }
-.card-categorie:nth-child(3) .image-primo-piano::after { content: 'N°03'; }
-.card-categorie:nth-child(4) .image-primo-piano::after { content: 'N°04'; }
 
 .image-primo-piano::after {
     position: absolute;
@@ -468,7 +513,8 @@ body:not(:has(.home)) > section:first-of-type {
     }
 }
 
-
+/* Su touch non c'è hover: il numero di fotogramma resta
+   sempre leggermente visibile invece di apparire solo al tocco */
 @media (hover: none) {
     .image-primo-piano::after {
         opacity: 0.7;
@@ -487,16 +533,18 @@ body:not(:has(.home)) > section:first-of-type {
     object-fit: cover;
     filter: grayscale(15%) contrast(1.03);
     transform: scale(1.02);
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
+    transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .image-primo-piano:hover img {
         transform: scale(1.08);
         filter: grayscale(0%) contrast(1.05);
+        color: var(--accent);
     }
 }
 
+/* ---------- Etichetta sotto il fotogramma ---------- */
 .card-categorie > a:last-child {
     font-family: var(--font-body);
     font-size: 0.8rem;
@@ -513,7 +561,9 @@ body:not(:has(.home)) > section:first-of-type {
     }
 }
 
-
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
 
 @media (max-width: 720px) {
     .home {

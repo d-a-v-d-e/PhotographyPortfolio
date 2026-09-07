@@ -1,8 +1,7 @@
 ---
 import Gallery from "../layouts/gallery.astro";
 import NoRightClick from '../components/no_right_click.astro'
-import Header from "../components/header.astro";
-import Footer from "../components/footer.astro";
+import Layout from '../layouts/layout.astro';
 ---
 
 <html lang="it">
@@ -22,14 +21,21 @@ import Footer from "../components/footer.astro";
     </style>
 </head>
 <body>
-    <Header />
+<Layout>
+    <main>
     <div class="contatti">
         <a href= "https://www.instagram.com/nico.bonannoo?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw==" target="_blank">
             <img src="/instagram.png" alt="Instagram" width="50" height="50">@nico.bonannoo</a><br>
         <a href="" data-link-type="mailto">
             <img src="/email.png" alt="E-mail" width="50" height="50">nicolabonannofoto@gmail.com</a>
 
+
+
     </div>
-    <Footer />
+
+        <div><p>pronto a discutere per ore qualsiasi proposta o idea</p></div>
+    </main>
+</Layout>
+
 </body>
 </html>

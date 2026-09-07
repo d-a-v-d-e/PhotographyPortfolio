@@ -1,79 +1,36 @@
 ---
-import Gallery from "../layouts/gallery.astro";
-import NoRightClick from '../components/no_right_click.astro'
-import Footer from "../components/footer.astro";
----
-<html lang="it">
-<NoRightClick />
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Colori</title>
-</head>
-<body>
+import '../styles/global.css';
+import '../styles/gallery.css';
 
+import Gallery from '../layouts/gallery.astro';
+import { Picture } from 'astro:assets';
+import NoRightClick from '../components/no_right_click.astro';
+
+// Importa automaticamente tutte le foto della cartella —
+// aggiungerne una nuova qui dentro basta a farla comparire
+// in galleria, senza toccare questo file.
+const foto = Object.values(
+    import.meta.glob<{ default: ImageMetadata }>(
+        '../assets/categorie/Foto-colorate/*.{jpg,jpeg,JPG,JPEG,png}',
+        { eager: true }
+    )
+).map((mod) => mod.default);
+---
+<NoRightClick />
 <Gallery title="Colori">
     <Fragment slot="foto">
-
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-        <div class="foto_gallery">
-            <img src="public/categorie/Foto-colorate/DSCF0913.jpg" alt="" width="400" height="500">
-        </div>
-
-
+        {foto.map((img, i) => (
+                <div class="foto_gallery">
+                    <Picture
+                            src={img}
+                            alt={`Foto a colori ${i + 1}`}
+                            height={800}
+                            densities={[1, 1.5, 2]}
+                            formats={['avif', 'webp', 'jpeg']}
+                            loading={i < 2 ? 'eager' : 'lazy'}
+                            quality={75}
+                    />
+                </div>
+        ))}
     </Fragment>
 </Gallery>
-</body>
-</html>

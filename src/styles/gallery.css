@@ -1,0 +1,587 @@
+
+    /* =========================================================
+       PAGINE GALLERIA (Colori, Bianco e nero, Concept, ...)
+       Di default le foto scorrono in orizzontale; un pulsante in
+       alto a destra passa alla visualizzazione a griglia.
+       Le immagini mantengono sempre il loro rapporto originale.
+       ========================================================= */
+
+.gallery-page {
+    padding: 6rem var(--space-4) var(--space-5);
+}
+
+.gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.gallery-header h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    color: var(--fg);
+}
+
+
+/* =========================================================
+   PULSANTE CAMBIO VISUALIZZAZIONE
+   ========================================================= */
+
+.view-toggle {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 3px;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: var(--fg);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.view-toggle span {
+    background: currentColor;
+    border-radius: 2px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.view-toggle[aria-pressed='true'] span {
+    opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .view-toggle:hover span {
+        opacity: 0.85;
+    }
+}
+
+
+/* =========================================================
+   WRAPPER
+   Ospita le frecce e il track.
+   Non scorre mai direttamente.
+   ========================================================= */
+
+.ph_content {
+    position: relative;
+}
+
+
+/* =========================================================
+   VISTA ORIZZONTALE
+   Le immagini mantengono il rapporto originale.
+   ========================================================= */
+
+.ph_track {
+    display: flex;
+    align-items: flex-start;
+
+    gap: var(--space-2);
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+
+    padding-bottom: var(--space-2);
+
+    scrollbar-width: none;
+}
+
+.ph_track::-webkit-scrollbar {
+    display: none;
+}
+
+
+/*
+ * Ogni fotografia ha un'altezza uniforme nella galleria,
+ * mentre la larghezza viene determinata automaticamente
+ * dal rapporto originale dell'immagine.
+ */
+.ph_track .foto_gallery {
+    flex: 0 0 auto;
+
+    width: auto;
+    height: 70vh;
+    max-height: 700px;
+
+    scroll-snap-align: start;
+
+    content-visibility: auto;
+    contain-intrinsic-size: auto 700px;
+}
+
+
+/*
+ * L'immagine occupa l'altezza del contenitore senza
+ * essere ritagliata o deformata.
+ */
+.foto_gallery img {
+    display: block;
+
+    width: auto;
+    height: 100%;
+
+    max-width: none;
+
+    object-fit: contain;
+
+
+
+    cursor: zoom-in;
+}
+
+
+/* =========================================================
+   VISTA GRIGLIA
+   Justified-style:
+   le immagini mantengono il loro rapporto originale.
+   ========================================================= */
+
+.ph_content.grid-view .ph_track {
+    display: flex;
+    flex-wrap: wrap;
+
+    align-items: flex-start;
+
+    gap: var(--space-2);
+
+    overflow: visible;
+
+    scroll-snap-type: none;
+}
+
+
+/*
+ * Le dimensioni vengono determinate dal contenuto.
+ * Nessun aspect-ratio viene imposto.
+ */
+.ph_content.grid-view .ph_track .foto_gallery {
+    flex: 0 0 auto;
+
+    width: auto;
+    height: auto;
+
+    scroll-snap-align: none;
+}
+
+
+/*
+ * Nella griglia ogni immagine conserva esattamente
+ * il proprio rapporto originale.
+ */
+.ph_content.grid-view .ph_track .foto_gallery img {
+    display: block;
+
+    width: auto;
+    height: auto;
+
+    max-width: 100%;
+
+    aspect-ratio: auto;
+
+    object-fit: contain;
+
+    border: 1px solid var(--line);
+}
+
+
+/* =========================================================
+   FRECCE DI SCORRIMENTO
+   Rimangono figlie del wrapper fisso.
+   ========================================================= */
+
+.ca-prev,
+.ca-next {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 2.75rem;
+    height: 2.75rem;
+
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+
+    background: rgba(11, 10, 9, 0.6);
+
+    cursor: pointer;
+
+    z-index: 2;
+}
+
+.ca-prev {
+    left: 0.5rem;
+}
+
+.ca-next {
+    right: 0.5rem;
+}
+
+
+/* ---------- Icona freccia ---------- */
+
+.ca-prev::before,
+.ca-next::before {
+    content: '';
+
+    display: block;
+
+    width: 0.5rem;
+    height: 0.5rem;
+
+    border-right: 2px solid var(--fg);
+    border-bottom: 2px solid var(--fg);
+}
+
+.ca-prev::before {
+    transform: rotate(135deg);
+    margin-left: 3px;
+}
+
+.ca-next::before {
+    transform: rotate(-45deg);
+    margin-right: 3px;
+}
+
+
+/* ---------- Nasconde le frecce nella griglia ---------- */
+
+.ph_content.grid-view .ca-prev,
+.ph_content.grid-view .ca-next {
+    display: none;
+}
+
+
+           /* =========================================================
+              LIGHTBOX
+              ========================================================= */
+
+       .lightbox {
+           position: fixed;
+           inset: 0;
+
+           z-index: 100;
+
+           display: flex;
+           align-items: center;
+           justify-content: center;
+
+           padding: var(--space-3);
+
+           background: rgba(5, 5, 5, 0.94);
+
+           opacity: 0;
+           pointer-events: none;
+
+           transition: opacity 0.25s ease;
+       }
+
+    .lightbox.is-open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+
+    /* =========================================================
+       CONTENITORE
+       ========================================================= */
+
+    .lightbox-content {
+        position: relative;
+
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        overflow: hidden;
+
+        touch-action: pan-y;
+    }
+
+
+    /* =========================================================
+       FOTO
+       ========================================================= */
+
+    .lightbox img {
+        display: block;
+
+        max-width: 90vw;
+        max-height: 90vh;
+
+        width: auto;
+        height: auto;
+
+        object-fit: contain;
+
+        border: 1px solid var(--line-strong);
+
+        user-select: none;
+        -webkit-user-drag: none;
+
+        /*
+         * Necessario per l'animazione.
+         */
+        opacity: 1;
+        transform: translateX(0);
+
+        transition:
+                opacity 0.25s ease,
+                transform 0.3s ease;
+    }
+
+
+    /* =========================================================
+       ANIMAZIONI CAMBIO FOTO
+       ========================================================= */
+
+    /*
+     * Foto che esce verso sinistra
+     */
+    .lightbox img.slide-out-left {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    /*
+     * Foto che esce verso destra
+     */
+    .lightbox img.slide-out-right {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    /*
+     * Foto che entra da sinistra
+     */
+    .lightbox img.slide-in-left {
+        opacity: 0;
+        transform: translateX(-40px);
+    }
+
+    /*
+     * Foto che entra da destra
+     */
+    .lightbox img.slide-in-right {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+
+    /* =========================================================
+       CHIUSURA
+       ========================================================= */
+
+    .lightbox-close {
+        position: absolute;
+
+        top: var(--space-2);
+        right: var(--space-2);
+
+        width: 2.5rem;
+        height: 2.5rem;
+
+        border: none;
+        background: transparent;
+
+        color: var(--fg);
+
+        cursor: pointer;
+
+        z-index: 3;
+    }
+
+    .lightbox-close::before,
+    .lightbox-close::after {
+        content: '';
+
+        position: absolute;
+
+        top: 50%;
+        left: 50%;
+
+        width: 1.4rem;
+        height: 2px;
+
+        background: currentColor;
+    }
+
+    .lightbox-close::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .lightbox-close::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+
+    /* =========================================================
+       FRECCE DESKTOP
+       ========================================================= */
+
+    .lightbox-prev,
+    .lightbox-next {
+        position: absolute;
+
+        top: 50%;
+        transform: translateY(-50%);
+
+        width: 3rem;
+        height: 3rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid var(--line-strong);
+        border-radius: 50%;
+
+        background: rgba(11, 10, 9, 0.6);
+
+        color: var(--fg);
+
+        cursor: pointer;
+
+        z-index: 3;
+    }
+
+    .lightbox-prev {
+        left: 1rem;
+    }
+
+    .lightbox-next {
+        right: 1rem;
+    }
+
+
+    .lightbox-prev::before,
+    .lightbox-next::before {
+        content: '';
+
+        display: block;
+
+        width: 0.55rem;
+        height: 0.55rem;
+
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+    }
+
+    .lightbox-prev::before {
+        transform: rotate(135deg);
+        margin-left: 3px;
+    }
+
+    .lightbox-next::before {
+        transform: rotate(-45deg);
+        margin-right: 3px;
+    }
+
+
+    /* =========================================================
+       HOVER DESKTOP
+       ========================================================= */
+
+    @media (hover: hover) and (pointer: fine) {
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: rgba(11, 10, 9, 0.85);
+        }
+
+    }
+
+
+    /* =========================================================
+       MOBILE
+       Nessun pulsante di navigazione.
+       Solo swipe.
+       ========================================================= */
+
+    @media (max-width: 720px) {
+        .gallery-page {
+            padding: 5.5rem var(--space-2) var(--space-4);
+        }
+
+        /*
+         * Altezza più contenuta su smartphone.
+         * La larghezza viene calcolata automaticamente
+         * in base al rapporto originale.
+         */
+        .ph_track .foto_gallery {
+            height: 65vh;
+            max-height: 600px;
+        }
+
+        .lightbox {
+            padding: 0.75rem;
+        }
+
+        .lightbox-content {
+            width: 100%;
+            height: 100%;
+
+            overflow: hidden;
+
+            touch-action: pan-y;
+        }
+
+        .lightbox img {
+            transition:
+                    opacity 0.25s ease,
+                    transform 0.3s ease;
+        }
+
+        .lightbox img.slide-out-left {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        .lightbox img.slide-out-right {
+            opacity: 0;
+            transform: translateX(40px);
+        }
+
+        .lightbox img.slide-in-left {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+
+        .lightbox img.slide-in-right {
+            opacity: 0;
+            transform: translateX(40px);
+        }
+
+        /*
+         * IMPORTANTISSIMO:
+         * le frecce NON vengono semplicemente rese invisibili
+         * visivamente: vengono rimosse dal layout/interazione.
+         */
+        .lightbox-prev,
+        .lightbox-next {
+            display: none !important;
+        }
+
+        .lightbox-close {
+            top: 0.75rem;
+            right: 0.75rem;
+        }
+    }

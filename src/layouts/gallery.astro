@@ -1,27 +1,312 @@
 ---
-import Header from "../components/header.astro";
-import Footer from "../components/footer.astro";
+import Layout from '../layouts/layout.astro';
 
 interface Props {
-	title: string;
+    title: string;
 }
-const{title} = Astro.props
+const { title } = Astro.props;
 ---
 
-<html lang="it">
-    <head>
-        <title>{title}</title>
-    </head>
-    <body>
-        <Header />
-        <h1>{title}</h1>
-        <div class="ph_content">
-            <a class="ca-next"></a>
-            <a class="ca-prev"></a>
-            <slot name="foto" />
 
-            <slot />
+    <main class="gallery-page">
+        <Layout>
+        <div class="gallery-header">
+            <h1>{title}</h1>
+            <button
+                    type="button"
+                    class="view-toggle"
+                    id="view-toggle"
+                    aria-pressed="false"
+                    aria-label="Passa alla visualizzazione a griglia"
+            >
+                <span></span><span></span><span></span><span></span>
+            </button>
         </div>
-        <Footer />
-    </body>
-</html>
+
+        <!-- Wrapper fisso: NON scorre mai, ospita solo le frecce -->
+        <div class="ph_content" id="ph-content">
+            <a class="ca-prev" id="ca-prev" aria-label="Foto precedente"></a>
+            <a class="ca-next" id="ca-next" aria-label="Foto successiva"></a>
+
+            <!-- Track: questo sì che scorre / diventa griglia -->
+            <div class="ph_track" id="ph-track">
+                <slot name="foto" />
+                <slot />
+            </div>
+        </div>
+        </Layout>
+    </main>
+
+    <!-- Lightbox: foto ingrandita a schermo intero -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" aria-label="Chiudi"></button>
+        <button class="lightbox-prev" aria-label="Foto precedente"></button>
+
+        <div class="lightbox-content">
+            <img src="" alt="" decoding="async" />
+        </div>
+
+        <button class="lightbox-next" aria-label="Foto successiva"></button>
+    </div>
+
+
+<script>
+    /* =========================================================
+       GALLERIA
+       ========================================================= */
+
+    const toggle = document.getElementById('view-toggle');
+    const wrapper = document.getElementById('ph-content');
+    const track = document.getElementById('ph-track');
+    const prev = document.getElementById('ca-prev');
+    const next = document.getElementById('ca-next');
+
+    /* =========================================================
+       CAMBIO VISUALIZZAZIONE
+       ========================================================= */
+
+    if (toggle && wrapper) {
+        toggle.addEventListener('click', () => {
+            const isGrid = wrapper.classList.toggle('grid-view');
+
+            toggle.setAttribute('aria-pressed', String(isGrid));
+            toggle.setAttribute(
+                'aria-label',
+                isGrid ? 'Passa alla visualizzazione a scorrimento' : 'Passa alla visualizzazione a griglia'
+            );
+        });
+    }
+
+    /* =========================================================
+       FRECCE GALLERIA
+       ========================================================= */
+
+    if (prev && track) {
+        prev.addEventListener('click', () => {
+            track.scrollBy({ left: -track.clientWidth * 0.9, behavior: 'smooth' });
+        });
+    }
+
+    if (next && track) {
+        next.addEventListener('click', () => {
+            track.scrollBy({ left: track.clientWidth * 0.9, behavior: 'smooth' });
+        });
+    }
+
+    /* =========================================================
+       LIGHTBOX
+       ========================================================= */
+
+    const lightboxElement = document.getElementById('lightbox');
+
+    if (!lightboxElement) {
+        console.warn('Lightbox non trovato.');
+    } else {
+        const lightbox = lightboxElement;
+
+        const imageElement = lightbox.querySelector<HTMLImageElement>('img');
+        const closeButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-close');
+        const prevButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-prev');
+        const nextButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-next');
+
+        // Ogni foto della galleria: usiamo data-full (risoluzione
+        // originale) se presente, altrimenti la miniatura stessa.
+        const galleryImages = Array.from(
+            document.querySelectorAll<HTMLImageElement>('.foto_gallery img')
+        );
+
+        if (!imageElement || !closeButton || !prevButton || !nextButton || galleryImages.length === 0) {
+            console.warn('Elementi del lightbox mancanti.');
+        } else {
+            // Costanti "sicure": una volta superato il controllo
+            // sopra, il loro tipo resta non-null per sempre, anche
+            // dentro le funzioni dichiarate più sotto.
+            const image = imageElement;
+            const close = closeButton;
+            const previous = prevButton;
+            const following = nextButton;
+
+            const getFullSrc = (img: HTMLImageElement) => img.dataset.full || img.src;
+
+            /* =================================================
+               STATO
+               ================================================= */
+
+            let currentIndex = 0;
+            let animationRunning = false;
+
+            /* =================================================
+               APRI LIGHTBOX
+               ================================================= */
+
+            function openLightbox(index: number) {
+                currentIndex = index;
+
+                image.src = getFullSrc(galleryImages[currentIndex]);
+                image.alt = galleryImages[currentIndex].alt || '';
+
+                image.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
+
+                lightbox.classList.add('is-open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            /* =================================================
+               CHIUDI LIGHTBOX
+               ================================================= */
+
+            function closeLightbox() {
+                lightbox.classList.remove('is-open');
+                document.body.style.overflow = '';
+
+                image.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
+
+                setTimeout(() => {
+                    if (!lightbox.classList.contains('is-open')) {
+                        image.src = '';
+                    }
+                }, 250);
+            }
+
+            /* =================================================
+               CAMBIO FOTO
+               ================================================= */
+
+            function changeImage(newIndex: number, direction: 'next' | 'previous') {
+                if (animationRunning) return;
+                if (newIndex === currentIndex) return;
+
+                animationRunning = true;
+
+                const exitClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+                const enterClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+
+                image.classList.add(exitClass);
+
+                setTimeout(() => {
+                    currentIndex = newIndex;
+
+                    image.src = getFullSrc(galleryImages[currentIndex]);
+                    image.alt = galleryImages[currentIndex].alt || '';
+
+                    image.classList.remove(exitClass);
+                    image.classList.add(enterClass);
+
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            image.classList.remove(enterClass);
+                        });
+                    });
+
+                    setTimeout(() => {
+                        animationRunning = false;
+                    }, 300);
+                }, 250);
+            }
+
+            function showNext() {
+                const newIndex = (currentIndex + 1) % galleryImages.length;
+                changeImage(newIndex, 'next');
+            }
+
+            function showPrevious() {
+                const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+                changeImage(newIndex, 'previous');
+            }
+
+            /* =================================================
+               CLICK FOTO
+               ================================================= */
+
+            galleryImages.forEach((imageElement, index) => {
+                imageElement.addEventListener('click', () => {
+                    openLightbox(index);
+                });
+            });
+
+            /* =================================================
+               CHIUDI / FRECCE
+               ================================================= */
+
+            close.addEventListener('click', (event) => {
+                event.stopPropagation();
+                closeLightbox();
+            });
+
+            previous.addEventListener('click', (event) => {
+                event.stopPropagation();
+                showPrevious();
+            });
+
+            following.addEventListener('click', (event) => {
+                event.stopPropagation();
+                showNext();
+            });
+
+            /* =================================================
+               CLICK SFONDO
+               ================================================= */
+
+            lightbox.addEventListener('click', (event) => {
+                if (event.target === lightbox) closeLightbox();
+            });
+
+            /* =================================================
+               TASTIERA
+               ================================================= */
+
+            document.addEventListener('keydown', (event) => {
+                if (!lightbox.classList.contains('is-open')) return;
+
+                if (event.key === 'Escape') {
+                    closeLightbox();
+                    return;
+                }
+                if (event.key === 'ArrowLeft') {
+                    showPrevious();
+                    return;
+                }
+                if (event.key === 'ArrowRight') {
+                    showNext();
+                    return;
+                }
+            });
+
+            /* =================================================
+               SWIPE MOBILE
+               ================================================= */
+
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            lightbox.addEventListener(
+                'touchstart',
+                (event) => {
+                    const touch = event.changedTouches[0];
+                    touchStartX = touch.clientX;
+                    touchStartY = touch.clientY;
+                },
+                { passive: true }
+            );
+
+            lightbox.addEventListener(
+                'touchend',
+                (event) => {
+                    const touch = event.changedTouches[0];
+                    const deltaX = touch.clientX - touchStartX;
+                    const deltaY = touch.clientY - touchStartY;
+
+                    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
+                    if (Math.abs(deltaX) < 50) return;
+
+                    if (deltaX < 0) {
+                        showNext();
+                    } else {
+                        showPrevious();
+                    }
+                },
+                { passive: true }
+            );
+        }
+    }
+</script>

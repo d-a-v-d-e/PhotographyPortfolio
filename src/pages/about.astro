@@ -1,24 +1,29 @@
 ---
-import Header from '../components/header.astro';
-import Footer from "../components/footer.astro";
-import NoRightClick from '../components/no_right_click.astro'
+import '../styles/global.css';
+import '../styles/about.css';
+import Layout from '../layouts/layout.astro';
 ---
-<html lang="it">
-<NoRightClick />
-<head>
-    <title>About</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-</head>
-<body>
-    <Header />
-    <div class="img_about">
-        <img src="foto_about.jpg" alt="" width="500" height="500">
-    </div>
 
-    <div class="bio">
-        <a>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui</a>
-    </div>
-    <Footer />
-</body>
-</html>
+
+    <main class="about-page">
+        <Layout>
+        <div class="about-grid">
+            <div class="img_about">
+                <img src="/foto_about.jpg" alt="Ritratto di Nico Bonanno" width="500" height="500" />
+            </div>
+
+            <div class="bio">
+                <p>
+                    Nato, cresciuto e tutt'ora a Novara, cresco trovando nelle arti visive una grande passione.
+                    Appassionato di cinema e fotografia in particolare mi approccio alla seconda seriamente durante le superiori.
+                    Inizio a scattare con la D5000 della madre, per poi più avanti spostarmi su una X-T50.<br><br>
+
+                    In contemporanea trovo nell'associazionismo politico e sociale una casa, col tempo diventando
+                    anche fotografo volontario per progetti ed eventi di Sermais e Libera Novara, di cui faccio parte attivamente.<br><br>
+
+                    Ad oggi porto avanti questa passione col sogno di continuare a sperimentare e ad imparare, e non mi esclude nulla dal futuro.
+                </p>
+            </div>
+        </div>
+        </Layout>
+    </main>
