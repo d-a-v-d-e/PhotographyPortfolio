@@ -1,0 +1,35 @@
+---
+import Layout from '../../layouts/layout.astro';
+import NoRightClick from '../../components/no_right_click.astro';
+import '../../styles/global.css';
+import '../../styles/contatti.css';
+---
+
+<NoRightClick />
+<Layout>
+    <style>
+        .contatti-page {
+            background-image: url('/contatti_bg.jpg');
+        }
+    </style>
+    <main class="contatti-page">
+        <div class="contatti">
+            <a
+                    href="https://www.instagram.com/nico.bonannoo?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=="
+                    target="_blank"
+                    rel="noopener noreferrer"
+            >
+                <img src="/instagram.png" alt="" width="50" height="50" />
+                @nico.bonannoo
+            </a>
+
+            <a href="mailto:nicolabonannofoto@gmail.com">
+                <img src="/email.png" alt="" width="50" height="50" />
+                nicolabonannofoto@gmail.com
+            </a>
+        </div>
+
+        <p class="contatti-tagline">Pronto a discutere per ore di qualsiasi proposta o idea.</p>
+    </main>
+</Layout>
+

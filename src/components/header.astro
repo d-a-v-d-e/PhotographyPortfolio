@@ -1,32 +1,167 @@
+
 ---
-const isHome = Astro.url.pathname === '/';
+const pathname = Astro.url.pathname;
+
+// Determina la lingua attuale
+const isEnglish = pathname.startsWith('/en');
+const currentLanguage = isEnglish ? 'EN' : 'IT';
+
+// Calcola la pagina equivalente nell'altra lingua
+const getLanguagePath = (english: boolean) => {
+    const path = pathname.replace(/^\/(it|en)/, '');
+
+    if (english) {
+    // Italiano → Inglese
+        if (path === '/about') return '/en/about';
+    if (path === '/contatti') return '/en/contacts';
+    return `/en${path || '/'}`;
+    }
+
+    // Inglese → Italiano
+    if (path === '/about') return '/it/about';
+    if (path === '/contacts') return '/it/contatti';
+    return `/it${path || '/'}`;
+    };
+
+const italianPath = getLanguagePath(false);
+const englishPath = getLanguagePath(true);
+
+const isHome =
+pathname === '/' ||
+pathname === '/it' ||
+pathname === '/it/' ||
+pathname === '/en' ||
+pathname === '/en/';
 ---
 
-<header class:list={['site-header', { 'site-header--home': isHome }]} id="site-header">
+<header
+        class:list={[
+            'site-header',
+            { 'site-header--home': isHome }
+        ]}
+        id="site-header"
+>
     <nav>
         <div class="site-brand">
-            <a href="/" class="site-name">Nico Bonanno</a>
-            {isHome && <span class="site-subtitle">Fotografo</span>}
+            <a
+                    href={isEnglish ? '/en/' : '/it/'}
+                    class="site-name"
+            >
+                Nico Bonanno
+            </a>
+
+            {isHome && (
+                    <span class="site-subtitle">
+                    {isEnglish ? 'Photographer' : 'Fotografo'}
+                </span>
+            )}
         </div>
 
-        <button
-                type="button"
-                class="nav-toggle"
-                id="nav-toggle"
-                aria-expanded="false"
-                aria-controls="site-nav"
-                aria-label="Apri il menu"
-        >
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
+        <div class="header-right">
 
-        <ul id="site-nav">
-            <li><a href="/about">Bio</a></li>
-            <li><a href="/#categorie">Foto</a></li>
-            <li><a href="/contatti">Contatti</a></li>
-        </ul>
+            <!-- Selettore lingua -->
+            <div class="language-switcher" id="language-switcher">
+                <button
+                        type="button"
+                        class="language-toggle"
+                        id="language-toggle"
+                        aria-expanded="false"
+                        aria-controls="language-menu"
+                        aria-label={
+                            isEnglish
+                                ? 'Change language'
+                                : 'Cambia lingua'
+                        }
+                >
+                    <svg
+                            class="language-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                    >
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <path d="M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9"></path>
+                        <path d="M12 3c-2.5 2.5-3.5 5.5-3.5 9s1 6.5 3.5 9"></path>
+                    </svg>
+
+                    <span>{currentLanguage}</span>
+
+                    <svg
+                            class="language-chevron"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                    >
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+
+                <div
+                        class="language-menu"
+                        id="language-menu"
+                        aria-hidden="true"
+                >
+                    <a
+                            href={italianPath}
+                            class:list={{ active: !isEnglish }}
+                            lang="it"
+                    >
+                        Italiano
+                    </a>
+
+                    <a
+                            href={englishPath}
+                            class:list={{ active: isEnglish }}
+                            lang="en"
+                    >
+                        English
+                    </a>
+                </div>
+            </div>
+
+            <!-- Menu mobile -->
+            <button
+                    type="button"
+                    class="nav-toggle"
+                    id="nav-toggle"
+                    aria-expanded="false"
+                    aria-controls="site-nav"
+                    aria-label={isEnglish ? 'Open menu' : 'Apri il menu'}
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul id="site-nav">
+                <li>
+                    <a href={isEnglish ? '/en/about' : '/it/about'}>
+                        {isEnglish ? 'About' : 'Bio'}
+                    </a>
+                </li>
+
+                <li>
+                    <a href={isEnglish ? '/en/#categories' : '/it/#categorie'}>
+                        {isEnglish ? 'Photos' : 'Foto'}
+                    </a>
+                </li>
+
+                <li>
+                    <a href={isEnglish ? '/en/contacts' : '/it/contatti'}>
+                        {isEnglish ? 'Contact' : 'Contatti'}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </nav>
 </header>
 
@@ -34,6 +169,10 @@ const isHome = Astro.url.pathname === '/';
     const header = document.getElementById('site-header');
     const toggle = document.getElementById('nav-toggle');
     const nav = document.getElementById('site-nav');
+
+    /* =========================
+       MENU MOBILE
+       ========================= */
 
     if (header && toggle && nav) {
         const closeMenu = () => {
@@ -59,11 +198,67 @@ const isHome = Astro.url.pathname === '/';
         toggle.addEventListener('click', toggleMenu);
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') closeMenu();
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
         });
 
         nav.querySelectorAll('a').forEach((link) => {
             link.addEventListener('click', closeMenu);
+        });
+    }
+
+    /* =========================
+       SELETTORE LINGUA
+       ========================= */
+
+    const languageSwitcher =
+        document.getElementById('language-switcher');
+
+    const languageToggle =
+        document.getElementById('language-toggle');
+
+    const languageMenu =
+        document.getElementById('language-menu');
+
+    if (languageSwitcher && languageToggle && languageMenu) {
+
+        const closeLanguageMenu = () => {
+            languageSwitcher.classList.remove('is-open');
+            languageToggle.setAttribute('aria-expanded', 'false');
+            languageMenu.setAttribute('aria-hidden', 'true');
+        };
+
+        const openLanguageMenu = () => {
+            languageSwitcher.classList.add('is-open');
+            languageToggle.setAttribute('aria-expanded', 'true');
+            languageMenu.setAttribute('aria-hidden', 'false');
+        };
+
+        languageToggle.addEventListener('click', (event) => {
+            event.stopPropagation();
+
+            if (languageSwitcher.classList.contains('is-open')) {
+                closeLanguageMenu();
+            } else {
+                openLanguageMenu();
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (
+                !languageSwitcher.contains(
+                    event.target as Node
+                )
+            ) {
+                closeLanguageMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeLanguageMenu();
+            }
         });
     }
 </script>
@@ -73,28 +268,52 @@ const isHome = Astro.url.pathname === '/';
     const header = document.getElementById('site-header');
 
     if (header) {
-        // 0 = in cima alla pagina, 1 = a metà dell'altezza scrollabile
+        // 0 = in cima alla pagina
+        // 1 = a metà dell'altezza scrollabile
         const update = () => {
-            const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollable =
+                document.documentElement.scrollHeight -
+                window.innerHeight;
+
             const target = scrollable * 0.5;
-            const progress = target > 0 ? Math.min(window.scrollY / target, 1) : 1;
-            header.style.setProperty('--shrink', progress.toFixed(3));
+
+            const progress =
+                target > 0
+                    ? Math.min(window.scrollY / target, 1)
+                    : 1;
+
+            header.style.setProperty(
+                '--shrink',
+                progress.toFixed(3)
+            );
         };
 
         let ticking = false;
+
         const onScroll = () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
                     update();
                     ticking = false;
                 });
+
                 ticking = true;
             }
         };
 
         update();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', update);
+
+        window.addEventListener(
+            'scroll',
+            onScroll,
+            { passive: true }
+        );
+
+        window.addEventListener(
+            'resize',
+            update
+        );
     }
 </script>
     )}
+

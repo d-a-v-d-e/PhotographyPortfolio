@@ -1,0 +1,79 @@
+
+---
+import Header from '../../components/header.astro';
+import Footer from '../../components/footer.astro';
+import NoRightClick from '../../components/no_right_click.astro';
+import '../../styles/global.css';
+
+const lang = 'it';
+---
+
+
+
+<html lang={lang}>
+<NoRightClick />
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nicola Bonanno</title>
+        <link rel="icon" type="image/x-icon" href="public/favicon.ico">
+        <style>
+            .home {
+                background-image: url('/indexbgimg2.JPG');
+                background-size: cover;
+                background-repeat: no-repeat;
+
+            }
+        </style>
+    </head>
+        <body>
+
+          <section class="home">
+
+            <Header />
+            <div class="forward"><a href="#categorie"></a></div>
+              <style> section .forward a::before{
+                  content: url(/icons8-freccia-espandi-52.png);
+              }</style>
+          </section>
+          <div class="background-color"></div>
+          <section class="categorie" id="categorie">
+              <h3 class="categorie-title">Foto</h3>
+
+              <div class="content">
+                  <a class="ca-next"></a>
+                  <a class="ca-prev"></a>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href="/it/f_colors"> <img src="/categorie/colors.jpg" alt="Foto a colori" width="400" height="500"></a>
+                      </div>
+                      <a href="">colori</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href="/it/f_b&w"> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
+                      </div>
+                      <a href="">Bianco e nero</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href="/it/f_concepts"> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
+                      </div>
+                      <a href="">Concepts</a>
+                  </div>
+
+                  <div class="card-categorie">
+                      <div class="image-primo-piano">
+                          <a href="/it/f_edited"> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
+                      </div>
+                      <a href="">?</a>
+                  </div>
+              </div>
+          </section>
+            <Footer />
+        </body>
+</html>

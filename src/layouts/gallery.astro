@@ -1,17 +1,17 @@
 ---
 import Layout from '../layouts/layout.astro';
-
 interface Props {
     title: string;
 }
+
 const { title } = Astro.props;
 ---
 
-
-    <main class="gallery-page">
-        <Layout>
+<main class="gallery-page">
+    <Layout>
         <div class="gallery-header">
             <h1>{title}</h1>
+
             <button
                     type="button"
                     class="view-toggle"
@@ -19,35 +19,69 @@ const { title } = Astro.props;
                     aria-pressed="false"
                     aria-label="Passa alla visualizzazione a griglia"
             >
-                <span></span><span></span><span></span><span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
         </div>
 
         <!-- Wrapper fisso: NON scorre mai, ospita solo le frecce -->
         <div class="ph_content" id="ph-content">
-            <a class="ca-prev" id="ca-prev" aria-label="Foto precedente"></a>
-            <a class="ca-next" id="ca-next" aria-label="Foto successiva"></a>
 
-            <!-- Track: questo sì che scorre / diventa griglia -->
+            <a
+                    class="ca-prev"
+                    id="ca-prev"
+                    aria-label="Foto precedente"
+            ></a>
+
+            <a
+                    class="ca-next"
+                    id="ca-next"
+                    aria-label="Foto successiva"
+            ></a>
+
+            <!-- Track: scorre orizzontalmente oppure diventa griglia -->
             <div class="ph_track" id="ph-track">
                 <slot name="foto" />
                 <slot />
             </div>
+
         </div>
-        </Layout>
-    </main>
+    </Layout>
+</main>
 
-    <!-- Lightbox: foto ingrandita a schermo intero -->
-    <div class="lightbox" id="lightbox">
-        <button class="lightbox-close" aria-label="Chiudi"></button>
-        <button class="lightbox-prev" aria-label="Foto precedente"></button>
 
-        <div class="lightbox-content">
-            <img src="" alt="" decoding="async" />
-        </div>
+<!-- =========================================================
+     LIGHTBOX
+     ========================================================= -->
 
-        <button class="lightbox-next" aria-label="Foto successiva"></button>
+<div class="lightbox" id="lightbox">
+
+    <button
+            class="lightbox-close"
+            aria-label="Chiudi"
+    ></button>
+
+    <button
+            class="lightbox-prev"
+            aria-label="Foto precedente"
+    ></button>
+
+    <div class="lightbox-content">
+        <img
+                src=""
+                alt=""
+                decoding="async"
+        />
     </div>
+
+    <button
+            class="lightbox-next"
+            aria-label="Foto successiva"
+    ></button>
+
+</div>
 
 
 <script>
@@ -58,8 +92,192 @@ const { title } = Astro.props;
     const toggle = document.getElementById('view-toggle');
     const wrapper = document.getElementById('ph-content');
     const track = document.getElementById('ph-track');
+
     const prev = document.getElementById('ca-prev');
     const next = document.getElementById('ca-next');
+
+
+    /* =========================================================
+       JUSTIFIED GRID
+       ========================================================= */
+
+    function updateJustifiedGrid() {
+        if (!wrapper || !track) return;
+
+        if (!wrapper.classList.contains('grid-view')) return;
+
+        const images = Array.from(
+            track.querySelectorAll<HTMLImageElement>(
+                '.foto_gallery img'
+            )
+        );
+
+        if (images.length === 0) return;
+
+        const styles = getComputedStyle(track);
+
+        const gap = parseFloat(styles.gap) || 0;
+
+        const containerWidth = track.clientWidth;
+
+        /*
+         * Altezza desiderata delle righe.
+         *
+         * Desktop:
+         * 260px circa
+         *
+         * Mobile:
+         * 180px circa
+         */
+
+        const targetRowHeight =
+            window.innerWidth <= 720
+                ? 180
+                : 260;
+
+        let row: HTMLImageElement[] = [];
+
+        let aspectRatioSum = 0;
+
+
+        /*
+         * Crea una riga.
+         */
+        function createRow(isLastRow = false) {
+
+            if (row.length === 0) return;
+
+
+            const totalGap =
+                gap * (row.length - 1);
+
+
+            let rowHeight =
+                (containerWidth - totalGap) /
+                aspectRatioSum;
+
+
+            /*
+             * L'ultima riga non viene
+             * forzata ad occupare tutta
+             * la larghezza.
+             */
+
+            if (isLastRow) {
+                rowHeight = Math.min(
+                    rowHeight,
+                    targetRowHeight
+                );
+            }
+
+
+            row.forEach((img) => {
+
+                const ratio =
+                    img.naturalWidth /
+                    img.naturalHeight;
+
+
+                const width =
+                    rowHeight * ratio;
+
+
+                const item =
+                    img.closest<HTMLElement>(
+                        '.foto_gallery'
+                    );
+
+
+                if (!item) return;
+
+
+                item.style.width =
+                    `${width}px`;
+
+                item.style.height =
+                    `${rowHeight}px`;
+
+
+                img.style.width =
+                    `${width}px`;
+
+                img.style.height =
+                    `${rowHeight}px`;
+
+            });
+
+
+            row = [];
+
+            aspectRatioSum = 0;
+        }
+
+
+        /*
+         * Costruzione delle righe.
+         */
+
+        images.forEach((img) => {
+
+            /*
+             * Se l'immagine non è ancora
+             * caricata, aspettiamo il caricamento.
+             */
+
+            if (
+                !img.naturalWidth ||
+                !img.naturalHeight
+            ) {
+                return;
+            }
+
+
+            const ratio =
+                img.naturalWidth /
+                img.naturalHeight;
+
+
+            row.push(img);
+
+            aspectRatioSum += ratio;
+
+
+            const totalGap =
+                gap * (row.length - 1);
+
+
+            const calculatedHeight =
+                (
+                    containerWidth -
+                    totalGap
+                ) /
+                aspectRatioSum;
+
+
+            /*
+             * Se abbiamo raggiunto
+             * un'altezza sufficientemente
+             * bassa, chiudiamo la riga.
+             */
+
+            if (
+                calculatedHeight <=
+                targetRowHeight &&
+                row.length > 1
+            ) {
+                createRow();
+            }
+
+        });
+
+
+        /*
+         * Ultima riga.
+         */
+
+        createRow(true);
+    }
+
 
     /* =========================================================
        CAMBIO VISUALIZZAZIONE
@@ -69,244 +287,732 @@ const { title } = Astro.props;
         toggle.addEventListener('click', () => {
             const isGrid = wrapper.classList.toggle('grid-view');
 
-            toggle.setAttribute('aria-pressed', String(isGrid));
+            toggle.setAttribute(
+                'aria-pressed',
+                String(isGrid)
+            );
+
             toggle.setAttribute(
                 'aria-label',
-                isGrid ? 'Passa alla visualizzazione a scorrimento' : 'Passa alla visualizzazione a griglia'
+                isGrid
+                    ? 'Passa alla visualizzazione a scorrimento'
+                    : 'Passa alla visualizzazione a griglia'
             );
+
+            if (isGrid) {
+                // Attiva la griglia
+                requestAnimationFrame(() => {
+                    updateJustifiedGrid();
+                });
+            } else {
+                // Torna alla visualizzazione orizzontale
+                const items = track?.querySelectorAll<HTMLElement>(
+                    '.foto_gallery'
+                );
+
+                const images = track?.querySelectorAll<HTMLImageElement>(
+                    '.foto_gallery img'
+                );
+
+                items?.forEach((item) => {
+                    item.style.removeProperty('width');
+                    item.style.removeProperty('height');
+                });
+
+                images?.forEach((img) => {
+                    img.style.removeProperty('width');
+                    img.style.removeProperty('height');
+                });
+            }
         });
     }
+
+
+    /* =========================================================
+       AGGIORNAMENTO GRIGLIA AL RESIZE
+       ========================================================= */
+
+    let resizeTimeout: number | undefined;
+
+    window.addEventListener(
+        'resize',
+        () => {
+
+            if (
+                !wrapper?.classList.contains(
+                    'grid-view'
+                )
+            ) {
+                return;
+            }
+
+
+            window.clearTimeout(
+                resizeTimeout
+            );
+
+
+            resizeTimeout =
+                window.setTimeout(
+                    () => {
+                        updateJustifiedGrid();
+                    },
+                    100
+                );
+
+        }
+    );
+
+
+    /* =========================================================
+       AGGIORNAMENTO DOPO IL CARICAMENTO
+       ========================================================= */
+
+    if (track) {
+
+        const images =
+            Array.from(
+                track.querySelectorAll<HTMLImageElement>(
+                    '.foto_gallery img'
+                )
+            );
+
+
+        images.forEach((img) => {
+
+            if (!img.complete) {
+
+                img.addEventListener(
+                    'load',
+                    () => {
+
+                        if (
+                            wrapper?.classList.contains(
+                                'grid-view'
+                            )
+                        ) {
+                            updateJustifiedGrid();
+                        }
+
+                    },
+                    { once: true }
+                );
+
+            }
+
+        });
+
+    }
+
 
     /* =========================================================
        FRECCE GALLERIA
        ========================================================= */
 
     if (prev && track) {
-        prev.addEventListener('click', () => {
-            track.scrollBy({ left: -track.clientWidth * 0.9, behavior: 'smooth' });
-        });
+
+        prev.addEventListener(
+            'click',
+            () => {
+
+                track.scrollBy({
+                    left:
+                        -track.clientWidth *
+                        0.9,
+                    behavior: 'smooth'
+                });
+
+            }
+        );
+
     }
 
+
     if (next && track) {
-        next.addEventListener('click', () => {
-            track.scrollBy({ left: track.clientWidth * 0.9, behavior: 'smooth' });
-        });
+
+        next.addEventListener(
+            'click',
+            () => {
+
+                track.scrollBy({
+                    left:
+                        track.clientWidth *
+                        0.9,
+                    behavior: 'smooth'
+                });
+
+            }
+        );
+
     }
+
 
     /* =========================================================
        LIGHTBOX
        ========================================================= */
 
-    const lightboxElement = document.getElementById('lightbox');
-
-    if (!lightboxElement) {
-        console.warn('Lightbox non trovato.');
-    } else {
-        const lightbox = lightboxElement;
-
-        const imageElement = lightbox.querySelector<HTMLImageElement>('img');
-        const closeButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-close');
-        const prevButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-prev');
-        const nextButton = lightbox.querySelector<HTMLButtonElement>('.lightbox-next');
-
-        // Ogni foto della galleria: usiamo data-full (risoluzione
-        // originale) se presente, altrimenti la miniatura stessa.
-        const galleryImages = Array.from(
-            document.querySelectorAll<HTMLImageElement>('.foto_gallery img')
+    const lightboxElement =
+        document.getElementById(
+            'lightbox'
         );
 
-        if (!imageElement || !closeButton || !prevButton || !nextButton || galleryImages.length === 0) {
-            console.warn('Elementi del lightbox mancanti.');
-        } else {
-            // Costanti "sicure": una volta superato il controllo
-            // sopra, il loro tipo resta non-null per sempre, anche
-            // dentro le funzioni dichiarate più sotto.
-            const image = imageElement;
-            const close = closeButton;
-            const previous = prevButton;
-            const following = nextButton;
 
-            const getFullSrc = (img: HTMLImageElement) => img.dataset.full || img.src;
+    if (!lightboxElement) {
+
+        console.warn(
+            'Lightbox non trovato.'
+        );
+
+    } else {
+
+        const lightbox =
+            lightboxElement;
+
+
+        const imageElement =
+            lightbox.querySelector<HTMLImageElement>(
+                'img'
+            );
+
+
+        const closeButton =
+            lightbox.querySelector<HTMLButtonElement>(
+                '.lightbox-close'
+            );
+
+
+        const prevButton =
+            lightbox.querySelector<HTMLButtonElement>(
+                '.lightbox-prev'
+            );
+
+
+        const nextButton =
+            lightbox.querySelector<HTMLButtonElement>(
+                '.lightbox-next'
+            );
+
+
+        /*
+         * Tutte le immagini della galleria.
+         */
+
+        const galleryImages =
+            Array.from(
+                document.querySelectorAll<HTMLImageElement>(
+                    '.foto_gallery img'
+                )
+            );
+
+
+        if (
+            !imageElement ||
+            !closeButton ||
+            !prevButton ||
+            !nextButton ||
+            galleryImages.length === 0
+        ) {
+
+            console.warn(
+                'Elementi del lightbox mancanti.'
+            );
+
+        } else {
+
+            const image =
+                imageElement;
+
+
+            const close =
+                closeButton;
+
+
+            const previous =
+                prevButton;
+
+
+            const following =
+                nextButton;
+
+
+            /*
+             * Usa data-full se presente.
+             * Altrimenti usa src.
+             */
+
+            const getFullSrc =
+                (
+                    img: HTMLImageElement
+                ) =>
+                    img.dataset.full ||
+                    img.src;
+
 
             /* =================================================
                STATO
                ================================================= */
 
             let currentIndex = 0;
+
             let animationRunning = false;
+
 
             /* =================================================
                APRI LIGHTBOX
                ================================================= */
 
-            function openLightbox(index: number) {
+            function openLightbox(
+                index: number
+            ) {
+
                 currentIndex = index;
 
-                image.src = getFullSrc(galleryImages[currentIndex]);
-                image.alt = galleryImages[currentIndex].alt || '';
 
-                image.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
+                image.src =
+                    getFullSrc(
+                        galleryImages[
+                            currentIndex
+                            ]
+                    );
 
-                lightbox.classList.add('is-open');
-                document.body.style.overflow = 'hidden';
+
+                image.alt =
+                    galleryImages[
+                        currentIndex
+                        ].alt || '';
+
+
+                image.classList.remove(
+                    'slide-out-left',
+                    'slide-out-right',
+                    'slide-in-left',
+                    'slide-in-right'
+                );
+
+
+                lightbox.classList.add(
+                    'is-open'
+                );
+
+
+                document.body.style.overflow =
+                    'hidden';
+
             }
+
 
             /* =================================================
                CHIUDI LIGHTBOX
                ================================================= */
 
             function closeLightbox() {
-                lightbox.classList.remove('is-open');
-                document.body.style.overflow = '';
 
-                image.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right');
+                lightbox.classList.remove(
+                    'is-open'
+                );
 
-                setTimeout(() => {
-                    if (!lightbox.classList.contains('is-open')) {
-                        image.src = '';
-                    }
-                }, 250);
+
+                document.body.style.overflow =
+                    '';
+
+
+                image.classList.remove(
+                    'slide-out-left',
+                    'slide-out-right',
+                    'slide-in-left',
+                    'slide-in-right'
+                );
+
+
+                setTimeout(
+                    () => {
+
+                        if (
+                            !lightbox.classList.contains(
+                                'is-open'
+                            )
+                        ) {
+                            image.src = '';
+                        }
+
+                    },
+                    250
+                );
+
             }
+
 
             /* =================================================
                CAMBIO FOTO
                ================================================= */
 
-            function changeImage(newIndex: number, direction: 'next' | 'previous') {
-                if (animationRunning) return;
-                if (newIndex === currentIndex) return;
+            function changeImage(
+                newIndex: number,
+                direction:
+                    'next' |
+                    'previous'
+            ) {
+
+                if (animationRunning)
+                    return;
+
+
+                if (
+                    newIndex ===
+                    currentIndex
+                ) {
+                    return;
+                }
+
 
                 animationRunning = true;
 
-                const exitClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
-                const enterClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
 
-                image.classList.add(exitClass);
+                const exitClass =
+                    direction === 'next'
+                        ? 'slide-out-left'
+                        : 'slide-out-right';
 
-                setTimeout(() => {
-                    currentIndex = newIndex;
 
-                    image.src = getFullSrc(galleryImages[currentIndex]);
-                    image.alt = galleryImages[currentIndex].alt || '';
+                const enterClass =
+                    direction === 'next'
+                        ? 'slide-in-right'
+                        : 'slide-in-left';
 
-                    image.classList.remove(exitClass);
-                    image.classList.add(enterClass);
 
-                    requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                            image.classList.remove(enterClass);
-                        });
-                    });
+                image.classList.add(
+                    exitClass
+                );
 
-                    setTimeout(() => {
-                        animationRunning = false;
-                    }, 300);
-                }, 250);
+
+                setTimeout(
+                    () => {
+
+                        currentIndex =
+                            newIndex;
+
+
+                        image.src =
+                            getFullSrc(
+                                galleryImages[
+                                    currentIndex
+                                    ]
+                            );
+
+
+                        image.alt =
+                            galleryImages[
+                                currentIndex
+                                ].alt || '';
+
+
+                        image.classList.remove(
+                            exitClass
+                        );
+
+
+                        image.classList.add(
+                            enterClass
+                        );
+
+
+                        requestAnimationFrame(
+                            () => {
+
+                                requestAnimationFrame(
+                                    () => {
+
+                                        image.classList.remove(
+                                            enterClass
+                                        );
+
+                                    }
+                                );
+
+                            }
+                        );
+
+
+                        setTimeout(
+                            () => {
+
+                                animationRunning =
+                                    false;
+
+                            },
+                            300
+                        );
+
+                    },
+                    250
+                );
+
             }
+
 
             function showNext() {
-                const newIndex = (currentIndex + 1) % galleryImages.length;
-                changeImage(newIndex, 'next');
+
+                const newIndex =
+                    (
+                        currentIndex + 1
+                    ) %
+                    galleryImages.length;
+
+
+                changeImage(
+                    newIndex,
+                    'next'
+                );
+
             }
 
+
             function showPrevious() {
-                const newIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-                changeImage(newIndex, 'previous');
+
+                const newIndex =
+                    (
+                        currentIndex -
+                        1 +
+                        galleryImages.length
+                    ) %
+                    galleryImages.length;
+
+
+                changeImage(
+                    newIndex,
+                    'previous'
+                );
+
             }
+
 
             /* =================================================
                CLICK FOTO
                ================================================= */
 
-            galleryImages.forEach((imageElement, index) => {
-                imageElement.addEventListener('click', () => {
-                    openLightbox(index);
-                });
-            });
+            galleryImages.forEach(
+                (
+                    imageElement,
+                    index
+                ) => {
+
+                    imageElement.addEventListener(
+                        'click',
+                        () => {
+                            openLightbox(index);
+                        }
+                    );
+
+                }
+            );
+
 
             /* =================================================
                CHIUDI / FRECCE
                ================================================= */
 
-            close.addEventListener('click', (event) => {
-                event.stopPropagation();
-                closeLightbox();
-            });
+            close.addEventListener(
+                'click',
+                (event) => {
 
-            previous.addEventListener('click', (event) => {
-                event.stopPropagation();
-                showPrevious();
-            });
+                    event.stopPropagation();
 
-            following.addEventListener('click', (event) => {
-                event.stopPropagation();
-                showNext();
-            });
+                    closeLightbox();
+
+                }
+            );
+
+
+            previous.addEventListener(
+                'click',
+                (event) => {
+
+                    event.stopPropagation();
+
+                    showPrevious();
+
+                }
+            );
+
+
+            following.addEventListener(
+                'click',
+                (event) => {
+
+                    event.stopPropagation();
+
+                    showNext();
+
+                }
+            );
+
 
             /* =================================================
                CLICK SFONDO
                ================================================= */
 
-            lightbox.addEventListener('click', (event) => {
-                if (event.target === lightbox) closeLightbox();
-            });
+            lightbox.addEventListener(
+                'click',
+                (event) => {
+
+                    if (
+                        event.target ===
+                        lightbox
+                    ) {
+                        closeLightbox();
+                    }
+
+                }
+            );
+
 
             /* =================================================
                TASTIERA
                ================================================= */
 
-            document.addEventListener('keydown', (event) => {
-                if (!lightbox.classList.contains('is-open')) return;
+            document.addEventListener(
+                'keydown',
+                (event) => {
 
-                if (event.key === 'Escape') {
-                    closeLightbox();
-                    return;
+                    if (
+                        !lightbox.classList.contains(
+                            'is-open'
+                        )
+                    ) {
+                        return;
+                    }
+
+
+                    if (
+                        event.key ===
+                        'Escape'
+                    ) {
+
+                        closeLightbox();
+
+                        return;
+
+                    }
+
+
+                    if (
+                        event.key ===
+                        'ArrowLeft'
+                    ) {
+
+                        showPrevious();
+
+                        return;
+
+                    }
+
+
+                    if (
+                        event.key ===
+                        'ArrowRight'
+                    ) {
+
+                        showNext();
+
+                        return;
+
+                    }
+
                 }
-                if (event.key === 'ArrowLeft') {
-                    showPrevious();
-                    return;
-                }
-                if (event.key === 'ArrowRight') {
-                    showNext();
-                    return;
-                }
-            });
+            );
+
 
             /* =================================================
                SWIPE MOBILE
                ================================================= */
 
             let touchStartX = 0;
+
             let touchStartY = 0;
+
 
             lightbox.addEventListener(
                 'touchstart',
                 (event) => {
-                    const touch = event.changedTouches[0];
-                    touchStartX = touch.clientX;
-                    touchStartY = touch.clientY;
+
+                    const touch =
+                        event.changedTouches[0];
+
+
+                    touchStartX =
+                        touch.clientX;
+
+
+                    touchStartY =
+                        touch.clientY;
+
                 },
-                { passive: true }
+                {
+                    passive: true
+                }
             );
+
 
             lightbox.addEventListener(
                 'touchend',
                 (event) => {
-                    const touch = event.changedTouches[0];
-                    const deltaX = touch.clientX - touchStartX;
-                    const deltaY = touch.clientY - touchStartY;
 
-                    if (Math.abs(deltaX) <= Math.abs(deltaY)) return;
-                    if (Math.abs(deltaX) < 50) return;
+                    const touch =
+                        event.changedTouches[0];
+
+
+                    const deltaX =
+                        touch.clientX -
+                        touchStartX;
+
+
+                    const deltaY =
+                        touch.clientY -
+                        touchStartY;
+
+
+                    /*
+                     * Ignora movimenti verticali.
+                     */
+
+                    if (
+                        Math.abs(deltaX) <=
+                        Math.abs(deltaY)
+                    ) {
+                        return;
+                    }
+
+
+                    /*
+                     * Swipe minimo:
+                     * 50px.
+                     */
+
+                    if (
+                        Math.abs(deltaX) <
+                        50
+                    ) {
+                        return;
+                    }
+
 
                     if (deltaX < 0) {
+
                         showNext();
+
                     } else {
+
                         showPrevious();
+
                     }
+
                 },
-                { passive: true }
+                {
+                    passive: true
+                }
             );
+
         }
+
     }
 </script>

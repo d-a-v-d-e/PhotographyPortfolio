@@ -1,23 +1,23 @@
 ---
-import '../styles/global.css';
-import '../styles/gallery.css';
+import '../../styles/global.css';
+import '../../styles/gallery.css';
 
-import Gallery from '../layouts/gallery.astro';
+import Gallery from '../../layouts/gallery.astro';
 import { Picture } from 'astro:assets';
-import NoRightClick from '../components/no_right_click.astro';
+import NoRightClick from '../../components/no_right_click.astro';
 
 // Importa automaticamente tutte le foto della cartella —
 // aggiungerne una nuova qui dentro basta a farla comparire
 // in galleria, senza toccare questo file.
 const foto = Object.values(
     import.meta.glob<{ default: ImageMetadata }>(
-        '../assets/categorie/Edited/*.{jpg,jpeg,JPG,JPEG,png}',
+        '../assets/categorie/Foto-colorate/*.{jpg,jpeg,JPG,JPEG,png}',
         { eager: true }
     )
 ).map((mod) => mod.default);
 ---
 <NoRightClick />
-<Gallery title="?">
+<Gallery title="Colori">
     <Fragment slot="foto">
         {foto.map((img, i) => (
                 <div class="foto_gallery">

@@ -1,18 +1,17 @@
 ---
-import Layout from '../layouts/layout.astro';
-import NoRightClick from '../components/no_right_click.astro';
-import '../styles/global.css';
-import '../styles/contatti.css';
+import Layout from '../../layouts/layout.astro';
+import NoRightClick from '../../components/no_right_click.astro';
+import '../../styles/global.css';
+import '../../styles/contatti.css';
 ---
-<head>
-<style>
-    .contatti-page {
-        background-image: url('/contatti_bg.jpg');
-    }
-</style>
-</head>
+
 <NoRightClick />
 <Layout>
+    <style>
+        .contatti-page {
+            background-image: url('/contatti_bg.jpg');
+        }
+    </style>
     <main class="contatti-page">
         <div class="contatti">
             <a
@@ -30,7 +29,7 @@ import '../styles/contatti.css';
             </a>
         </div>
 
-        <p class="contatti-tagline">Pronto a discutere per ore qualsiasi proposta o idea.</p>
+        <p class="contatti-tagline">Pronto a discutere per ore di qualsiasi proposta o idea.</p>
     </main>
 </Layout>
 
