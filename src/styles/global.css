@@ -540,7 +540,8 @@ body:not(:has(.home)) > section:first-of-type {
     .image-primo-piano:hover img {
         transform: scale(1.08);
         filter: grayscale(0%) contrast(1.05);
-        color: var(--accent);
+        .card-categorie{
+        color: var(--accent);}
     }
 }
 
@@ -553,6 +554,7 @@ body:not(:has(.home)) > section:first-of-type {
     color: var(--muted);
     padding-left: 0.5rem;
     transition: color 0.2s ease;
+
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -126,18 +126,20 @@
  * essere ritagliata o deformata.
  */
 .foto_gallery img {
-    display: block;
-
-    width: auto;
-    height: 100%;
-
-    max-width: none;
-
-    object-fit: contain;
-
-
 
     cursor: zoom-in;
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+
+    user-select: none;
+    -webkit-user-drag: none;
+    opacity: 1;
+    transform: translateX(0);
+    transition: opacity 0.25s ease, transform 0.3s ease;
 }
 
 
@@ -332,7 +334,7 @@
 
         object-fit: contain;
 
-        border: 1px solid var(--line-strong);
+
 
         user-select: none;
         -webkit-user-drag: none;
@@ -512,8 +514,6 @@
 
     /* =========================================================
        MOBILE
-       Nessun pulsante di navigazione.
-       Solo swipe.
        ========================================================= */
 
     @media (max-width: 720px) {
@@ -521,14 +521,28 @@
             padding: 5.5rem var(--space-2) var(--space-4);
         }
 
-        /*
-         * Altezza più contenuta su smartphone.
-         * La larghezza viene calcolata automaticamente
-         * in base al rapporto originale.
-         */
+
         .ph_track .foto_gallery {
-            height: 65vh;
+            height: 50vh;
             max-height: 600px;
+            align-content: center;
+        }
+
+        .foto_gallery img {
+            align-content: center;
+            cursor: zoom-in;
+            display: block;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: auto;
+            height: 50%;
+            object-fit: contain;
+            user-select: none;
+            -webkit-user-drag: none;
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 0.25s ease, transform 0.3s ease;
+
         }
 
         .lightbox {
@@ -570,11 +584,6 @@
             transform: translateX(40px);
         }
 
-        /*
-         * IMPORTANTISSIMO:
-         * le frecce NON vengono semplicemente rese invisibili
-         * visivamente: vengono rimosse dal layout/interazione.
-         */
         .lightbox-prev,
         .lightbox-next {
             display: none !important;
@@ -583,5 +592,29 @@
         .lightbox-close {
             top: 0.75rem;
             right: 0.75rem;
+        }
+
+        .ca-prev, .ca-next{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 90%;
+            transform: translateY(-50%);
+            width: 2.75rem;
+            height: 2.75rem;
+            border-radius: 50%;
+            background: rgba(11, 10, 9, 0.6);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .gallery-header h1 {
+            margin: 0;
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: clamp(3rem, 3.4vw, 2.6rem);
+            color: var(--fg);
+
         }
     }

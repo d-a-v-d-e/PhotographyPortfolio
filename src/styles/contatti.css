@@ -1,0 +1,97 @@
+/* =========================================================
+   PAGINA CONTATTI
+   Lo sfondo copre l'intera altezza della pagina (parte da
+   sotto l'header trasparente e arriva fino in fondo);
+   il testo resta allineato a sinistra.
+   Usa le variabili definite in global.css — importa quel
+   file prima di questo.
+   ========================================================= */
+
+.contatti-page {
+    min-height: 100vh; /* fallback per browser senza svh */
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: 7rem var(--space-4) var(--space-5);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Velatura scura per far risaltare il testo sopra la foto */
+.contatti-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+            to right,
+            rgba(11, 10, 9, 0.75) 0%,
+            rgba(11, 10, 9, 0.35) 55%,
+            rgba(11, 10, 9, 0.1) 100%
+    );
+    pointer-events: none;
+}
+
+.contatti-page {
+    position: relative;
+}
+
+.contatti-page > * {
+    position: relative;
+    z-index: 1;
+}
+
+.contatti {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.contatti a {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--fg);
+    transition: color 0.2s ease;
+}
+
+.contatti a img {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .contatti a:hover {
+        color: var(--accent);
+    }
+}
+
+.contatti-tagline {
+    margin: 0;
+    max-width: 32ch;
+    font-family: var(--font-display);
+    font-style: normal;
+    font-size: clamp(1.2rem, 2.4vw, 1.6rem);
+    line-height: 1.5;
+    color: var(--fg);
+}
+
+@media (max-width: 720px) {
+    .contatti-page {
+        padding: 6.5rem var(--space-2) var(--space-4);
+        background-position: center top;
+    }
+    .contatti a {
+        font-size: 1rem;
+    }
+    .contatti a img {
+        width: 1.7rem;
+        height: 1.7rem;
+    }
+}
