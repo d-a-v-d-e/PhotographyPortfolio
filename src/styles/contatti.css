@@ -19,12 +19,15 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
 }
 
 /* Velatura scura per far risaltare il testo sopra la foto */
 .contatti-page::before {
     content: '';
-    position: absolute;
+
+
+    position: fixed;
     inset: 0;
     background: linear-gradient(
             to right,
@@ -85,7 +88,7 @@
 @media (max-width: 720px) {
     .contatti-page {
         padding: 6.5rem var(--space-2) var(--space-4);
-        background-position: center top;
+        background-position: 33% top;
     }
     .contatti a {
         font-size: 1rem;

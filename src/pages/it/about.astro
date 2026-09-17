@@ -4,12 +4,18 @@ import '../../styles/about.css';
 import Layout from '../../layouts/layout.astro';
 ---
 
+<Layout>
 
     <main class="about-page">
-        <Layout>
         <div class="about-grid">
+
             <div class="img_about">
-                <img src="/foto_about.jpg" alt="Ritratto di Nico Bonanno" width="500" height="500" />
+                <img
+                        src="/foto_about.jpg"
+                        alt="Ritratto di Nico Bonanno"
+                        width="500"
+                        height="500"
+                />
             </div>
 
             <div class="bio">
@@ -24,6 +30,8 @@ import Layout from '../../layouts/layout.astro';
                     Ad oggi porto avanti questa passione col sogno di continuare a sperimentare e ad imparare, e non mi esclude nulla dal futuro.
                 </p>
             </div>
+
         </div>
-        </Layout>
     </main>
+
+</Layout>

@@ -209,6 +209,7 @@ button:focus-visible {
        display: flex;
        align-items: center;
        gap: var(--space-3);
+
    }
 
 .language-switcher {
@@ -323,11 +324,20 @@ button:focus-visible {
 @media (max-width: 720px) {
 
     .header-right {
-        gap: var(--space-2);
+        position: fixed;
+        top: var(--space-2);
+        right: calc(var(--space-2) + 2.5rem + 0.75rem);
+
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+
+        z-index: 3;
     }
 
     .language-toggle {
         gap: 0.3rem;
+        padding: 0.35rem 0;
     }
 
     .language-icon {
