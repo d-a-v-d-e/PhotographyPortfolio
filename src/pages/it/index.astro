@@ -1,4 +1,3 @@
-
 ---
 import Header from '../../components/header.astro';
 import Footer from '../../components/footer.astro';
@@ -12,68 +11,171 @@ const lang = 'it';
 
 <html lang={lang}>
 <NoRightClick />
-    <head>
+<head>
 
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Nicola Bonanno</title>
-        <link rel="icon" type="image/x-icon" href="public/favicon.ico">
-        <style>
-            .home {
-                background-image: url('/indexbgimg2.JPG');
-                background-size: cover;
-                background-repeat: no-repeat;
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nicola Bonanno</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <style>
+        .home {
+            background-image: url('/indexbgimg2.JPG');
+            background-size: cover;
+            background-repeat: no-repeat;
 
-            }
-        </style>
-    </head>
-        <body>
+        }
+    </style>
+</head>
+<body>
 
-          <section class="home">
+<section class="home">
 
-            <Header />
-            <div class="forward"><a href="#categorie"></a></div>
-              <style> section .forward a::before{
-                  content: url(/icons8-freccia-espandi-52.png);
-              }</style>
-          </section>
-          <div class="background-color"></div>
-          <section class="categorie" id="categorie">
-              <h3 class="categorie-title">Foto</h3>
+    <Header />
+    <div class="forward"><a href="#categorie"></a></div>
+    <style> section .forward a::before{
+        content: url(/icons8-freccia-espandi-52.png);
+    }</style>
+</section>
+<div class="background-color"></div>
+<section class="categorie" id="categorie">
+    <div class="categorie-header">
+        <button
+                type="button"
+                class="categorie-tab"
+                id="foto-tab"
+                role="tab"
+                aria-selected="true"
+                aria-controls="foto-content"
+        >
+            Foto
+        </button>
+        <button
+                type="button"
+                class="categorie-tab"
+                id="eventi-tab"
+                role="tab"
+                aria-selected="false"
+                aria-controls="eventi-content"
+        >
+            Eventi e Commissioni
+        </button>
+    </div>
 
-              <div class="content">
-                  <a class="ca-next"></a>
-                  <a class="ca-prev"></a>
+    <div class="categorie-panels">
+        <div class="content" id="foto-content" role="tabpanel" aria-labelledby="foto-tab">
+            <a class="ca-next"></a>
+            <a class="ca-prev"></a>
 
-                  <div class="card-categorie">
-                      <div class="image-primo-piano">
-                          <a href="/it/f_colors"> <img src="/categorie/colors.jpg" alt="Foto a colori" width="400" height="500"></a>
-                      </div>
-                      <a href="">colori</a>
-                  </div>
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_colors"> <img src="/categorie/colors.jpg" alt="Foto a colori" width="400" height="500"></a>
+                </div>
+                <a href="">colori</a>
+            </div>
 
-                  <div class="card-categorie">
-                      <div class="image-primo-piano">
-                          <a href="/it/f_b&w"> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
-                      </div>
-                      <a href="">Bianco e nero</a>
-                  </div>
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_b&w"> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
+                </div>
+                <a href="">Bianco e nero</a>
+            </div>
 
-                  <div class="card-categorie">
-                      <div class="image-primo-piano">
-                          <a href="/it/f_concepts"> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
-                      </div>
-                      <a href="">Concepts</a>
-                  </div>
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_concepts"> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
+                </div>
+                <a href="">Concepts</a>
+            </div>
 
-                  <div class="card-categorie">
-                      <div class="image-primo-piano">
-                          <a href="/it/f_edited"> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
-                      </div>
-                      <a href="">?</a>
-                  </div>
-              </div>
-          </section>
-            <Footer />
-        </body>
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_edited"> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
+                </div>
+                <a href="">?</a>
+            </div>
+        </div>
+
+        <div
+                class="ev-content"
+                id="eventi-content"
+                role="tabpanel"
+                aria-labelledby="eventi-tab"
+                style="display: none;"
+        >
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_scotch"> <img src="/categorie/scotch.webp" alt="Foto Scotch" width="400" height="500"></a>
+                </div>
+                <a href="">Scotch</a>
+            </div>
+
+            <div class="card-categorie">
+                <div class="image-primo-piano">
+                    <a href="/it/f_kantiere"> <img src="/categorie/kantiere.jpg" alt="Foto Kantiere" width="400" height="500"></a>
+                </div>
+                <a href="">Kantiere</a>
+            </div>
+        </div>
+    </div>
+</section>
+<Footer />
+</body>
 </html>
+
+<script>
+    const fotoTab = document.getElementById('foto-tab');
+    const eventiTab = document.getElementById('eventi-tab');
+    const fotoContent = document.getElementById('foto-content');
+    const eventiContent = document.getElementById('eventi-content');
+
+    if (fotoTab && eventiTab && fotoContent && eventiContent) {
+        let current: 'foto' | 'eventi' = 'foto';
+        let animating = false;
+
+        const swap = (
+            hide: HTMLElement,
+            show: HTMLElement,
+            hideClass: string,
+            showClass: string
+        ) => {
+            animating = true;
+
+            hide.classList.add(hideClass);
+
+            setTimeout(() => {
+                hide.style.display = 'none';
+                hide.classList.remove(hideClass);
+
+                show.style.display = 'grid';
+                show.classList.add(showClass);
+
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        show.classList.remove(showClass);
+                        animating = false;
+                    });
+                });
+            }, 350);
+        };
+
+        fotoTab.addEventListener('click', () => {
+            if (animating || current === 'foto') return;
+            current = 'foto';
+
+            eventiTab.setAttribute('aria-selected', 'false');
+            fotoTab.setAttribute('aria-selected', 'true');
+
+            swap(eventiContent, fotoContent, 'slide-out-right', 'slide-in-left');
+        });
+
+        eventiTab.addEventListener('click', () => {
+            if (animating || current === 'eventi') return;
+            current = 'eventi';
+
+            fotoTab.setAttribute('aria-selected', 'false');
+            eventiTab.setAttribute('aria-selected', 'true');
+
+            swap(fotoContent, eventiContent, 'slide-out-left', 'slide-in-right');
+        });
+    }
+</script>

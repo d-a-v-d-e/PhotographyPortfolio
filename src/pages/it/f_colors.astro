@@ -16,6 +16,13 @@ const foto = Object.values(
     )
 ).map((mod) => mod.default);
 ---
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Colori</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+</head>
+
 <NoRightClick />
 <Gallery title="Colori">
     <Fragment slot="foto">
@@ -29,8 +36,11 @@ const foto = Object.values(
                             formats={['avif', 'webp', 'jpeg']}
                             loading={i < 2 ? 'eager' : 'lazy'}
                             quality={75}
+
                     />
+
                 </div>
+
         ))}
     </Fragment>
 </Gallery>

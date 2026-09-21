@@ -201,16 +201,15 @@ button:focus-visible {
     color: var(--accent);
 }
 
-       /* =========================================================
-          LANGUAGE SWITCHER
-          ========================================================= */
+/* =========================================================
+   LANGUAGE SWITCHER
+   ========================================================= */
 
-   .header-right {
-       display: flex;
-       align-items: center;
-       gap: var(--space-3);
-
-   }
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
 
 .language-switcher {
     position: relative;
@@ -323,6 +322,9 @@ button:focus-visible {
 
 @media (max-width: 720px) {
 
+    /* A sinistra dell'hamburger (2.5rem di larghezza), non
+       sovrapposto: right = spazio dal bordo + larghezza
+       hamburger + margine tra i due */
     .header-right {
         position: fixed;
         top: var(--space-2);
@@ -591,19 +593,87 @@ body:not(:has(.home)) > section:first-of-type {
     background: var(--bg);
 }
 
-.categorie-title {
-    margin: 0 0 var(--space-4);
+.categorie-header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+}
+
+/* Le due voci (Foto / Eventi e Commissioni): stesso font e
+   stessa dimensione, cambia solo il colore per indicare
+   quale sezione è attiva */
+.categorie-tab {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
     font-family: var(--font-display);
     font-style: normal;
     font-weight: 400;
     font-size: clamp(2rem, 3.4vw, 2.9rem);
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.25s ease;
+}
+
+.categorie-tab[aria-selected='true'] {
     color: var(--fg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .categorie-tab:hover {
+        color: var(--fg);
+    }
+}
+
+/* Contenitore dei due pannelli: nasconde l'overflow laterale
+   durante la transizione di scorrimento */
+.categorie-panels {
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Scorrimento laterale tra "Foto" e "Eventi e Commissioni":
+   stessa tecnica animazione del lightbox nella galleria */
+.categorie-panels .content {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.categorie-panels .content.slide-out-left {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.categorie-panels .content.slide-out-right {
+    opacity: 0;
+    transform: translateX(40px);
+}
+
+.categorie-panels .content.slide-in-left {
+    opacity: 0;
+    transform: translateX(-40px);
+}
+
+.categorie-panels .content.slide-in-right {
+    opacity: 0;
+    transform: translateX(40px);
 }
 
 .categorie .content {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(350px, 390px));
+    justify-content: center;
+    gap: var(--space-3);
+}
+
+.categorie .ev-content {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 390px));
+    justify-content: left;
     gap: var(--space-3);
 }
 
@@ -692,8 +762,9 @@ body:not(:has(.home)) > section:first-of-type {
     .image-primo-piano:hover img {
         transform: scale(1.08);
         filter: grayscale(0%) contrast(1.05);
-        .card-categorie{
-        color: var(--accent);}
+    }
+    .image-primo-piano:hover ~ .card-categorie {
+        color: var(--accent);
     }
 }
 
@@ -729,13 +800,14 @@ body:not(:has(.home)) > section:first-of-type {
     }
 
     .categorie .content {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(130px, 160px));
+        justify-content: center;
         gap: var(--space-2);
     }
 }
 
 @media (max-width: 420px) {
     .categorie .content {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(120px, 140px));
     }
 }

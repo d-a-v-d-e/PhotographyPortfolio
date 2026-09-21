@@ -156,7 +156,34 @@ span {
 
     contain-intrinsic-size:
             auto 700px;
+
+
 }
+.ph_track .descrizione{
+
+    flex: 0 0 auto;
+
+    width: auto;
+
+    height: 70vh;
+
+    max-height: 700px;
+
+    scroll-snap-align: start;
+
+    content-visibility: auto;
+
+    contain-intrinsic-size:
+            auto 700px;
+
+    margin: 0;
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    line-height: 1.75;
+    color: var(--fg);
+    max-width: 62ch;
+}
+
 
 
 .foto_gallery img {
@@ -239,7 +266,9 @@ span {
 
 .ph_content.grid-view
 .ph_track
-.foto_gallery img {
+.foto_gallery img,.ph_content.grid-view
+.ph_track .descrizione
+{
 
     display: block;
 
@@ -253,7 +282,6 @@ span {
 
     object-fit: contain;
 
-    border: 1px solid var(--line);
 
     cursor: zoom-in;
 }

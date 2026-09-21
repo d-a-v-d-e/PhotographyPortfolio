@@ -1,0 +1,40 @@
+---
+import '../../styles/global.css';
+import '../../styles/gallery.css';
+
+import Gallery from '../../layouts/gallery.astro';
+import { Picture } from 'astro:assets';
+import NoRightClick from '../../components/no_right_click.astro';
+
+
+const foto = Object.values(
+    import.meta.glob<{ default: ImageMetadata }>(
+        '../../assets/categorie/Scotch/*.{jpg,jpeg,JPG,JPEG,png}',
+        { eager: true }
+    )
+).map((mod) => mod.default);
+---
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scotch</title>
+</head>
+
+<NoRightClick />
+<Gallery title="Scotch">
+    <Fragment slot="foto">
+        {foto.map((img, i) => (
+                <div class="foto_gallery">
+                    <Picture
+                            src={img}
+                            alt={`Foto a colori ${i + 1}`}
+                            height={800}
+                            densities={[1, 1.5, 2]}
+                            formats={['avif', 'webp', 'jpeg']}
+                            loading={i < 2 ? 'eager' : 'lazy'}
+                            quality={75}
+                    />
+                </div>
+        ))}
+    </Fragment>
+</Gallery>

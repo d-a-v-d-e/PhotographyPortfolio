@@ -42,14 +42,19 @@
 }
 
 @media (max-width: 720px) {
+    .bio p {
+        font-size: 1rem;
+    }
     .about-page {
         padding: 5.5rem var(--space-2) var(--space-4);
+        padding-left: 2rem;
+        padding-right: 2rem;
     }
     .about-grid {
         grid-template-columns: 1fr;
         gap: var(--space-3);
     }
     .img_about img {
-        aspect-ratio: 4 / 5;
+        aspect-ratio: 5 / 5;
     }
 }
