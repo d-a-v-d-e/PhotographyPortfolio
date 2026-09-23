@@ -8,7 +8,7 @@
 .about-page {
     min-height: 100vh;
     min-height: 100svh;
-    padding: 6rem var(--space-4) var(--space-5);
+    padding: 5rem var(--space-4) 5rem;
     display: flex;
     align-items: center;
     justify-content: center;

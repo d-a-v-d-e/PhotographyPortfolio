@@ -3,7 +3,7 @@
    ========================================================= */
 
 .gallery-page {
-    padding: 6rem var(--space-4) var(--space-5);
+    padding: 5rem var(--space-4) 5rem;
 }
 
 
@@ -176,12 +176,14 @@ span {
     contain-intrinsic-size:
             auto 700px;
 
+
     margin: 0;
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.30rem;
     line-height: 1.75;
     color: var(--fg);
     max-width: 62ch;
+
 }
 
 
@@ -446,7 +448,7 @@ span {
 
     position: relative;
 
-    width: 100%;
+    width: 90%;
     height: 100%;
 
     display: flex;

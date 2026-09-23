@@ -23,6 +23,10 @@ const foto = Object.values(
 <NoRightClick />
 <Gallery title="Scotch">
     <Fragment slot="foto">
+        <div class="descrizione">
+            Scotch è un festival che viene organizzato periodicamente a Fadabrav,<br> falegnameria sociale che si trova a Novara, nel quartiere di Sant'Agabio.<br>
+                <br>La prima edizione si è tenuta nel 2023, quest'anno ad animare lo spazio <br>ci sono stati talk, concerti, giochi e attività manuali.
+        </div>
         {foto.map((img, i) => (
                 <div class="foto_gallery">
                     <Picture
@@ -34,7 +38,9 @@ const foto = Object.values(
                             loading={i < 2 ? 'eager' : 'lazy'}
                             quality={75}
                     />
+
                 </div>
+
         ))}
     </Fragment>
 </Gallery>
