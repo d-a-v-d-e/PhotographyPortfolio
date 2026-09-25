@@ -16,7 +16,7 @@
 
 :root {
     --bg: #0b0a09;
-    --fg: #efebe4;
+    --fg: #f3f3f3;
     --muted: #948c7e;
     --accent: #c77b3f;
     --line: rgba(239, 235, 228, 0.14);
@@ -55,6 +55,7 @@ html {
 
 body {
     margin: 0;
+
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-body);
@@ -232,11 +233,11 @@ button:focus-visible {
 
     cursor: pointer;
 
-    transition: opacity 0.2s ease;
+    transition: color 0.2s;
 }
 
 .language-toggle:hover {
-    opacity: 0.65;
+    color: #c77b3f;
 }
 
 .language-icon {
@@ -759,11 +760,16 @@ body:not(:has(.home)) > section:first-of-type {
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .image-primo-piano:hover img {
+
+    .image-primo-piano:hover img,
+
+    .card-categorie:has(> a:last-child:hover) .image-primo-piano img {
         transform: scale(1.08);
         filter: grayscale(0%) contrast(1.05);
     }
-    .image-primo-piano:hover ~ .card-categorie {
+
+    .card-categorie:has(.image-primo-piano:hover) > a:last-child,
+    .card-categorie:has(> a:last-child:hover) > a:last-child {
         color: var(--accent);
     }
 }
@@ -775,16 +781,11 @@ body:not(:has(.home)) > section:first-of-type {
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
+
     padding-left: 0.5rem;
-    transition: color 0.2s ease;
-
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .card-categorie > a:last-child:hover {
-        color: var(--accent);
-    }
-}
+
 
 /* =========================================================
    RESPONSIVE
@@ -801,7 +802,7 @@ body:not(:has(.home)) > section:first-of-type {
 
     .categorie .content {
         grid-template-columns: repeat(auto-fit, minmax(130px, 160px));
-        justify-content: center;
+        justify-content: left;
         gap: var(--space-2);
     }
 }

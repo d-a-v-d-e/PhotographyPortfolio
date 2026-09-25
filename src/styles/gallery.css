@@ -1,9 +1,19 @@
-/* =========================================================
-   PAGINE GALLERIA
-   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+@font-face {
+    font-family: 'Epoch';
+    src: url('../../fonts/Epoch.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+    /* =========================================================
+       PAGINE GALLERIA
+       ========================================================= */
 
 .gallery-page {
     padding: 5rem var(--space-4) 5rem;
+
 }
 
 
@@ -18,7 +28,7 @@
 
     gap: var(--space-2);
 
-    margin-bottom: var(--space-3);
+
 }
 
 
@@ -26,10 +36,10 @@
     margin: 0;
 
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 100;
 
     font-size: clamp(
-            1.8rem,
+            3.6rem,
             3.4vw,
             2.6rem
     );
@@ -75,11 +85,15 @@
 
     border-radius: 2px;
 
-    opacity: 0.5;
+    opacity: 1;
 
-    transition:
-            opacity 0.2s ease;
+
 }
+    .view-toggle:hover {
+        opacity: 1;
+        color: #c77b3f;
+        transition: color 0.2s;
+    }
 
 
 .view-toggle[aria-pressed='true']
@@ -105,6 +119,7 @@ span {
 
 .ph_content {
     position: relative;
+
 }
 
 
@@ -114,20 +129,13 @@ span {
 
 .ph_track {
     display: flex;
-
     align-items: flex-start;
-
     gap: var(--space-2);
-
     overflow-x: auto;
     overflow-y: hidden;
-
     scroll-snap-type: x mandatory;
-
     -webkit-overflow-scrolling: touch;
-
     padding-bottom: var(--space-2);
-
     scrollbar-width: none;
 }
 
@@ -156,14 +164,17 @@ span {
 
     contain-intrinsic-size:
             auto 700px;
-
-
 }
-.ph_track .descrizione{
+
+
+
+.ph_track .descrizione {
+    padding: var(--space-3);
+    padding-top: 35px;
 
     flex: 0 0 auto;
 
-    width: auto;
+    width: 63vh;
 
     height: 70vh;
 
@@ -176,16 +187,41 @@ span {
     contain-intrinsic-size:
             auto 700px;
 
-
     margin: 0;
+
     font-family: var(--font-body);
-    font-size: 1.30rem;
+
+    font-size: 1.2rem;
+
     line-height: 1.75;
+
     color: var(--fg);
+
     max-width: 62ch;
+
+    border-right: #1e1e1e 2px solid;
 
 }
 
+    .ph_track .descrizione .specifica{
+    color: #c77b3f;
+    font-family: var(--font-display);
+
+
+
+    }
+
+    .ph_track .descrizione .visual {
+        padding-block: 20px;
+        /*border-bottom: #1e1e1e solid 2px;*/
+        border-top: #c77b3f solid 1px;
+
+    }
+
+
+.foto_gallery {
+    will-change: transform;
+}
 
 
 .foto_gallery img {
@@ -209,8 +245,7 @@ span {
 
     opacity: 1;
 
-    transform:
-            translateX(0);
+    transform: translateX(0);
 
     transition:
             opacity 0.25s ease,
@@ -268,9 +303,11 @@ span {
 
 .ph_content.grid-view
 .ph_track
-.foto_gallery img,.ph_content.grid-view
-.ph_track .descrizione
-{
+.foto_gallery img,
+
+.ph_content.grid-view
+.ph_track
+.descrizione {
 
     display: block;
 
@@ -283,7 +320,6 @@ span {
     aspect-ratio: auto;
 
     object-fit: contain;
-
 
     cursor: zoom-in;
 }
@@ -389,6 +425,7 @@ span {
 
 .ph_content.grid-view
 .ca-prev,
+
 .ph_content.grid-view
 .ca-next {
 
@@ -438,6 +475,8 @@ span {
 
     pointer-events: auto;
 }
+
+
 
 
 /* =========================================================
@@ -498,39 +537,16 @@ span {
    ========================================================= */
 
 .lightbox img.slide-out-left {
-
     opacity: 0;
-
-    transform:
-            translateX(-40px);
 }
 
 
 .lightbox img.slide-out-right {
-
     opacity: 0;
-
-    transform:
-            translateX(40px);
 }
 
 
-.lightbox img.slide-in-left {
 
-    opacity: 0;
-
-    transform:
-            translateX(-40px);
-}
-
-
-.lightbox img.slide-in-right {
-
-    opacity: 0;
-
-    transform:
-            translateX(40px);
-}
 
 
 /* =========================================================
@@ -922,7 +938,7 @@ span {
 
         font-size:
                 clamp(
-                        3rem,
+                        3.8rem,
                         3.4vw,
                         2.6rem
                 );
@@ -930,4 +946,23 @@ span {
         color: var(--fg);
     }
 
+}
+
+
+/* =========================================================
+   ACCESSIBILITÀ
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .foto_gallery {
+        will-change: auto;
+    }
+
+    .foto_gallery img,
+    .lightbox,
+    .lightbox img,
+    .view-toggle span {
+        transition: none;
+    }
 }
