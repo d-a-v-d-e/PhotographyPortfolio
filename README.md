@@ -96,7 +96,7 @@ Astro viene utilizzato come framework principale per la realizzazione del sito e
 Il sito supporta la visualizzazione in:
 
 * 🇮🇹 Italiano
-* 🇬🇧 Inglese
+* en Inglese
 
 Il cambio di lingua è disponibile tramite l'apposito pulsante presente nell'interfaccia.
 
