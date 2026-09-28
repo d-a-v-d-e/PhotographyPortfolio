@@ -11,7 +11,7 @@ import NoRightClick from '../../components/no_right_click.astro';
 // in galleria, senza toccare questo file.
 const foto = Object.values(
     import.meta.glob<{ default: ImageMetadata }>(
-        '../../assets/categorie/Foto-colorate/*.{jpg,jpeg,JPG,JPEG,png}',
+        '../../assets/categorie/Foto-colorate/*.{jpg,jpeg,JPG,JPEG,png,webp}',
         { eager: true }
     )
 ).map((mod) => mod.default);

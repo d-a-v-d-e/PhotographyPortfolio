@@ -39,29 +39,64 @@ const lang = 'it';
 <div class="background-color"></div>
 <section class="categorie" id="categorie">
     <div class="categorie-header">
-        <button
-                type="button"
-                class="categorie-tab"
-                id="foto-tab"
-                role="tab"
-                aria-selected="true"
-                aria-controls="foto-content"
-        >
-            Foto
-        </button>
-        <button
-                type="button"
-                class="categorie-tab"
-                id="eventi-tab"
-                role="tab"
-                aria-selected="false"
-                aria-controls="eventi-content"
-        >
-            Eventi e Commissioni
-        </button>
+        <div class="categorie-selector" id="categorie-selector">
+            <button
+                    type="button"
+                    class="categorie-tab categorie-selector-button"
+                    id="categorie-selector-button"
+                    aria-expanded="false"
+                    aria-haspopup="listbox"
+            >
+                <span id="categorie-selected">Foto</span>
+
+                <svg
+                        class="categorie-chevron"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                >
+                    <path
+                            d="M6 9l6 6 6-6"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                    />
+                </svg>
+            </button>
+
+            <div
+                    class="categorie-dropdown"
+                    id="categorie-dropdown"
+                    role="listbox"
+                    aria-label="Seleziona categoria"
+            >
+                <button
+                        type="button"
+                        class="categorie-option"
+                        data-category="foto"
+                        role="option"
+                        aria-selected="true"
+                >
+                    Foto
+                </button>
+
+                <button
+                        type="button"
+                        class="categorie-option"
+                        data-category="eventi"
+                        role="option"
+                        aria-selected="false"
+
+                >
+                    Eventi e Commissioni
+                </button>
+
+            </div>
+        </div>
     </div>
 
-    <div class="categorie-panels">
+    <div class="categorie-panels categorie-content">
         <div class="content" id="foto-content" role="tabpanel" aria-labelledby="foto-tab">
             <a class="ca-next"></a>
             <a class="ca-prev"></a>
@@ -96,7 +131,7 @@ const lang = 'it';
         </div>
 
         <div
-                class="ev-content"
+                class="ev-content categorie-content"
                 id="eventi-content"
                 role="tabpanel"
                 aria-labelledby="eventi-tab"
@@ -123,21 +158,57 @@ const lang = 'it';
 </html>
 
 <script>
-    const fotoTab = document.getElementById('foto-tab');
-    const eventiTab = document.getElementById('eventi-tab');
-    const fotoContent = document.getElementById('foto-content');
-    const eventiContent = document.getElementById('eventi-content');
+    const selector = document.getElementById('categorie-selector');
+    const selectorButton = document.getElementById('categorie-selector-button');
+    const selectedLabel = document.getElementById('categorie-selected');
+    const dropdown = document.getElementById('categorie-dropdown');
 
-    if (fotoTab && eventiTab && fotoContent && eventiContent) {
-        let current: 'foto' | 'eventi' = 'foto';
-        let animating = false;
+    const panels = document.querySelectorAll<HTMLElement>('.categorie-content');
+    const options = document.querySelectorAll<HTMLButtonElement>('.categorie-option');
+
+    type Category = {
+        label: string;
+        content: HTMLElement;
+    };
+
+    type CategoryId = 'foto' | 'eventi';
+
+    const categories: Record<CategoryId, Category> = {
+        foto: {
+            label: 'Foto',
+            content: document.getElementById('foto-content') as HTMLElement
+        },
+        eventi: {
+            label: 'Eventi e Commissioni',
+            content: document.getElementById('eventi-content') as HTMLElement
+        }
+    };
+
+    let current: CategoryId = 'foto';
+    let animating = false;
+
+    if (
+        selector &&
+        selectorButton &&
+        selectedLabel &&
+        dropdown
+    ) {
+        const closeDropdown = () => {
+            selector.classList.remove('is-open');
+            selectorButton.setAttribute('aria-expanded', 'false');
+        };
+
+        const openDropdown = () => {
+            selector.classList.add('is-open');
+            selectorButton.setAttribute('aria-expanded', 'true');
+        };
 
         const swap = (
             hide: HTMLElement,
             show: HTMLElement,
             hideClass: string,
             showClass: string
-        ) => {
+        ): void => {
             animating = true;
 
             hide.classList.add(hideClass);
@@ -158,24 +229,86 @@ const lang = 'it';
             }, 350);
         };
 
-        fotoTab.addEventListener('click', () => {
-            if (animating || current === 'foto') return;
-            current = 'foto';
+        const selectCategory = (category: CategoryId): void => {
+            if (animating) return;
 
-            eventiTab.setAttribute('aria-selected', 'false');
-            fotoTab.setAttribute('aria-selected', 'true');
+            const selectedCategory = categories[category];
+            const currentCategory = categories[current];
 
-            swap(eventiContent, fotoContent, 'slide-out-right', 'slide-in-left');
+            if (!selectedCategory) return;
+
+            closeDropdown();
+
+            if (category === current) {
+                return;
+            }
+
+            current = category;
+
+            selectedLabel.textContent = selectedCategory.label;
+
+            options.forEach((option: HTMLButtonElement) => {
+                const isSelected = option.dataset.category === category;
+
+                option.setAttribute(
+                    'aria-selected',
+                    String(isSelected)
+                );
+            });
+
+            if (category === 'eventi') {
+                swap(
+                    currentCategory.content,
+                    selectedCategory.content,
+                    'slide-out-left',
+                    'slide-in-right'
+                );
+            } else {
+                swap(
+                    currentCategory.content,
+                    selectedCategory.content,
+                    'slide-out-right',
+                    'slide-in-left'
+                );
+            }
+        };
+
+        selectorButton.addEventListener('click', () => {
+            const isOpen =
+                selector.getAttribute('aria-expanded') === 'true';
+
+            if (isOpen) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
         });
 
-        eventiTab.addEventListener('click', () => {
-            if (animating || current === 'eventi') return;
-            current = 'eventi';
+        options.forEach((option: HTMLButtonElement) => {
+            option.addEventListener('click', () => {
+                const category = option.dataset.category as CategoryId;
 
-            fotoTab.setAttribute('aria-selected', 'false');
-            eventiTab.setAttribute('aria-selected', 'true');
+                if (category) {
+                    selectCategory(category);
+                }
+            });
+        });
 
-            swap(fotoContent, eventiContent, 'slide-out-left', 'slide-in-right');
+        document.addEventListener('click', (event: MouseEvent) => {
+            const target = event.target;
+
+            if (
+                target instanceof Node &&
+                !selector.contains(target)
+            ) {
+                closeDropdown();
+            }
+        });
+
+        document.addEventListener('keydown', (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                closeDropdown();
+            }
         });
     }
 </script>

@@ -17,7 +17,7 @@
 :root {
     --bg: #0b0a09;
     --fg: #f3f3f3;
-    --muted: #948c7e;
+    --muted: #ffffff;
     --accent: #c77b3f;
     --line: rgba(239, 235, 228, 0.14);
     --line-strong: rgba(239, 235, 228, 0.28);
@@ -602,9 +602,73 @@ body:not(:has(.home)) > section:first-of-type {
     margin-bottom: var(--space-4);
 }
 
-/* Le due voci (Foto / Eventi e Commissioni): stesso font e
-   stessa dimensione, cambia solo il colore per indicare
-   quale sezione è attiva */
+/* =========================================================
+   SELETTORE CATEGORIE
+   ========================================================= */
+
+.categorie-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.categorie-selector-button {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.categorie-chevron {
+    width: 1.1rem;
+    height: 1.1rem;
+    flex-shrink: 0;
+
+    transition: transform 0.25s ease;
+}
+
+.categorie-selector.is-open .categorie-chevron {
+    transform: rotate(180deg);
+}
+
+/* ---------- Dropdown ---------- */
+
+.categorie-dropdown {
+    position: absolute;
+    top: calc(100% + 0.65rem);
+    left: 0;
+
+    min-width: max-content;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: 0.35rem;
+
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transform: translateY(-6px);
+
+    transition:
+            opacity 0.2s ease,
+            visibility 0.2s ease,
+            transform 0.2s ease;
+
+    z-index: 20;
+}
+
+.categorie-selector.is-open .categorie-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* ---------- Opzioni ---------- */
+
 .categorie-tab {
     margin: 0;
     padding: 0;
@@ -619,13 +683,67 @@ body:not(:has(.home)) > section:first-of-type {
     transition: color 0.25s ease;
 }
 
-.categorie-tab[aria-selected='true'] {
+.categorie-option {
+    display: block;
+
+    width: 100%;
+
+    padding: 0.55rem 0.7rem;
+
+    border: 0;
+    background: transparent;
+
+    color: #948C7EFF;
+
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 400;
+
+    text-align: left;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+            color 0.2s ease,
+            background-color 0.2s ease;
+}
+
+.categorie-option:hover {
+    color: var(--fg);
+    background: rgba(127, 127, 127, 0.1);
+}
+
+.categorie-option[aria-selected="true"] {
     color: var(--fg);
 }
 
-@media (hover: hover) and (pointer: fine) {
-    .categorie-tab:hover {
-        color: var(--fg);
+/* ---------- Desktop ---------- */
+
+@media (min-width: 721px) {
+    .categorie-selector-button {
+        font-size: clamp(2rem, 3.4vw, 2.9rem);
+    }
+
+    .categorie-dropdown {
+        min-width: 100%;
+    }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 720px) {
+    .categorie-selector-button {
+        font-size: clamp(2rem, 8vw, 2.5rem);
+    }
+
+    .categorie-dropdown {
+        min-width: 100%;
+        width: max-content;
+    }
+
+    .categorie-option {
+        font-size: 1rem;
     }
 }
 
@@ -777,7 +895,7 @@ body:not(:has(.home)) > section:first-of-type {
 /* ---------- Etichetta sotto il fotogramma ---------- */
 .card-categorie > a:last-child {
     font-family: var(--font-body);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
@@ -788,10 +906,11 @@ body:not(:has(.home)) > section:first-of-type {
 
 
 /* =========================================================
-   RESPONSIVE
+   RESPONSIVE — CATEGORIE
    ========================================================= */
 
 @media (max-width: 720px) {
+
     .home {
         padding: var(--space-2) var(--space-2) var(--space-4);
     }
@@ -800,15 +919,29 @@ body:not(:has(.home)) > section:first-of-type {
         padding: var(--space-4) var(--space-2);
     }
 
-    .categorie .content {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 160px));
-        justify-content: left;
+    /* Stessa griglia per "Foto" e "Eventi e Commissioni" */
+    .categorie .content,
+    .categorie .ev-content {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
         gap: var(--space-2);
+        width: 100%;
     }
-}
 
-@media (max-width: 420px) {
-    .categorie .content {
-        grid-template-columns: repeat(2, minmax(120px, 140px));
+    /* Tutte le card hanno esattamente la stessa larghezza */
+    .categorie .card-categorie {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Le immagini delle card occupano tutta la larghezza */
+    .categorie .image-primo-piano {
+        width: 100%;
+    }
+
+    .categorie .image-primo-piano img {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
     }
 }
