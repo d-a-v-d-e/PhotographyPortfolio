@@ -1,6 +1,6 @@
 # 📷 Portfolio Fotografico
 
-Portfolio fotografico personale realizzato per **Nico Bonanno**, con l'obiettivo di presentare e valorizzare i suoi lavori fotografici attraverso un'interfaccia semplice, minimale e completamente responsive.
+Portfolio fotografico personale realizzato per **Nico Bonanno**, con l'obiettivo di presentare e valorizzare i suoi lavori fotografici
 
 Il sito è stato sviluppato con **Astro**, utilizzando HTML, CSS e JavaScript/TypeScript.
 
