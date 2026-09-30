@@ -39,9 +39,12 @@ const foto = Object.values(
         {foto.map((img, i) => (
 
                 <div class="foto_gallery">
+
+                    <div class="image-placeholder"></div>
+
                     <Picture
                             src={img}
-                            alt={`Foto a colori ${i + 1}`}
+                            alt={`Kantiere ${i + 1}`}
                             height={800}
                             densities={[1, 1.5, 2]}
                             formats={['avif', 'webp', 'jpeg']}

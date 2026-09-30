@@ -108,12 +108,16 @@ pathname === '/en/';
                 <div
                         class="language-menu"
                         id="language-menu"
+                        role="listbox"
+                        aria-label="Seleziona lingua"
                         aria-hidden="true"
                 >
                     <a
                             href={italianPath}
                             class:list={{ active: !isEnglish }}
                             lang="it"
+                            role="option"
+                            aria-selected={!isEnglish}
                     >
                         Italiano
                     </a>
@@ -122,6 +126,8 @@ pathname === '/en/';
                             href={englishPath}
                             class:list={{ active: isEnglish }}
                             lang="en"
+                            role="option"
+                            aria-selected={isEnglish}
                     >
                         English
                     </a>

@@ -28,6 +28,9 @@ const foto = Object.values(
     <Fragment slot="foto">
         {foto.map((img, i) => (
                 <div class="foto_gallery">
+
+                    <div class="image-placeholder"></div>
+
                     <Picture
                             src={img}
                             alt={`Foto a colori ${i + 1}`}

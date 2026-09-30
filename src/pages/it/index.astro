@@ -237,6 +237,10 @@ const lang = 'it';
 
             if (!selectedCategory) return;
 
+            /*
+             * Chiude SEMPRE il dropdown quando viene
+             * selezionata una voce.
+             */
             closeDropdown();
 
             if (category === current) {
@@ -248,7 +252,8 @@ const lang = 'it';
             selectedLabel.textContent = selectedCategory.label;
 
             options.forEach((option: HTMLButtonElement) => {
-                const isSelected = option.dataset.category === category;
+                const isSelected =
+                    option.dataset.category === category;
 
                 option.setAttribute(
                     'aria-selected',
@@ -273,26 +278,40 @@ const lang = 'it';
             }
         };
 
-        selectorButton.addEventListener('click', () => {
-            const isOpen =
-                selector.getAttribute('aria-expanded') === 'true';
+        /* =========================
+           APERTURA / CHIUSURA DROPDOWN
+           ========================= */
 
-            if (isOpen) {
+        selectorButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+
+            if (selector.classList.contains('is-open')) {
                 closeDropdown();
             } else {
                 openDropdown();
             }
         });
 
+        /* =========================
+           SELEZIONE CATEGORIA
+           ========================= */
+
         options.forEach((option: HTMLButtonElement) => {
-            option.addEventListener('click', () => {
-                const category = option.dataset.category as CategoryId;
+            option.addEventListener('click', (event) => {
+                event.stopPropagation();
+
+                const category =
+                    option.dataset.category as CategoryId;
 
                 if (category) {
                     selectCategory(category);
                 }
             });
         });
+
+        /* =========================
+           CLICK FUORI
+           ========================= */
 
         document.addEventListener('click', (event: MouseEvent) => {
             const target = event.target;
@@ -305,10 +324,16 @@ const lang = 'it';
             }
         });
 
+        /* =========================
+           ESC
+           ========================= */
+
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 closeDropdown();
             }
         });
+
+
     }
 </script>

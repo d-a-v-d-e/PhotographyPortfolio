@@ -278,6 +278,23 @@ const { title } = Astro.props;
         createRow(true);
     }
 
+    document.querySelectorAll('.foto_gallery img').forEach((element) => {
+        const img = element as HTMLImageElement;
+        const container = img.closest('.foto_gallery');
+        const placeholder = container?.querySelector('.image-placeholder');
+
+        if (!placeholder) return;
+
+        const hidePlaceholder = () => {
+            placeholder.classList.add('loaded');
+        };
+
+        if (img.complete && img.naturalWidth > 0) {
+            hidePlaceholder();
+        } else {
+            img.addEventListener('load', hidePlaceholder, { once: true });
+        }
+    });
 
     /* =========================================================
        CAMBIO VISUALIZZAZIONE

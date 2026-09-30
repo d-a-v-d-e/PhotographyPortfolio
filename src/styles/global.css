@@ -14,6 +14,8 @@
     font-display: swap;
 }
 
+
+
 :root {
     --bg: #0b0a09;
     --fg: #f3f3f3;
@@ -47,6 +49,7 @@ html {
     html {
         scroll-behavior: auto;
     }
+
     * {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
@@ -94,7 +97,7 @@ button:focus-visible {
 .site-header {
     --shrink: 0;
     --name-max: 3.1rem;
-    --name-min: 1.05rem;
+    --name-min: 1.6rem;
 
     position: fixed;
     top: 0;
@@ -131,7 +134,7 @@ button:focus-visible {
 .site-header nav {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     row-gap: 0.5rem;
     gap: var(--space-3);
@@ -141,6 +144,7 @@ button:focus-visible {
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 /* "Fotografo", sempre sotto al nome, non linkabile (è uno span).
@@ -195,7 +199,7 @@ button:focus-visible {
     font-size: 0.85rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: color 0.2s ease;
+    transition: color 0.2s;
 }
 
 .site-header ul a:hover {
@@ -221,19 +225,20 @@ button:focus-visible {
 .language-toggle {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
 
-    padding: 0.35rem 0;
-
+    padding: 0;
     border: 0;
     background: transparent;
 
     color: inherit;
-    font: inherit;
+
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
 
     cursor: pointer;
-
-    transition: color 0.2s;
 }
 
 .language-toggle:hover {
@@ -241,8 +246,8 @@ button:focus-visible {
 }
 
 .language-icon {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     flex-shrink: 0;
 }
 
@@ -256,25 +261,27 @@ button:focus-visible {
 .language-switcher.is-open .language-chevron {
     transform: rotate(180deg);
 }
+.language-switcher span{
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
 
+}
 /* Menu */
 
 .language-menu {
     position: absolute;
     top: calc(100% + 0.75rem);
     right: 0;
-
-
     min-width: 120px;
+    background-color: var(--bg);
 
     display: flex;
     flex-direction: column;
 
     padding: 0.4rem;
 
-    background: inherit;
-    border: 2px solid var(--line);
 
+    border: 2px solid var(--line);
 
     opacity: 0;
     visibility: hidden;
@@ -295,14 +302,16 @@ button:focus-visible {
 }
 
 .language-menu a {
+    font-family: var(--font-display);
     display: block;
+    color: #948c7e;
 
     padding: 0.55rem 0.7rem;
 
-    color: inherit;
+
     text-decoration: none;
 
-    font-size: 0.85rem;
+    font-size: 1rem;
 
     transition:
             background-color 0.2s ease,
@@ -311,10 +320,12 @@ button:focus-visible {
 
 .language-menu a:hover {
     background: rgba(127, 127, 127, 0.1);
+    color: white;
 }
 
 .language-menu a.active {
-    font-weight: 600;
+
+    color: white;
 }
 
 /* =========================================================
@@ -340,7 +351,7 @@ button:focus-visible {
 
     .language-toggle {
         gap: 0.3rem;
-        padding: 0.35rem 0;
+        padding: 0.7rem 0;
     }
 
     .language-icon {
@@ -354,8 +365,6 @@ button:focus-visible {
     }
 }
 
-
-
 /* ---------- Pulsante hamburger (solo mobile) ---------- */
 .nav-toggle {
     display: none;
@@ -365,12 +374,13 @@ button:focus-visible {
     gap: 5px;
     width: 2.5rem;
     height: 2.5rem;
-    padding: 0;
+    padding-right: 0.6rem;
     border: none;
     background: transparent;
     color: inherit;
     cursor: pointer;
     transition: color 0.3s ease;
+
 }
 
 .nav-toggle span {
@@ -380,6 +390,7 @@ button:focus-visible {
     background: currentColor;
     border-radius: 1px;
     transition: transform 0.25s ease, opacity 0.25s ease;
+
 }
 
 .site-header.nav-open .nav-toggle span:nth-child(1) {
@@ -403,7 +414,7 @@ body:not(:has(.home)) > section:first-of-type {
 
 @media (max-width: 720px) {
     .site-header {
-        padding: var(--space-2);
+        padding: 2rem 1rem;
     }
     .site-header--home {
         --name-max: 1.9rem;
@@ -417,22 +428,52 @@ body:not(:has(.home)) > section:first-of-type {
         z-index: 2;
     }
 
-    /* Il nome resta sempre "fixed" (aperto o chiuso) così lo
-       spostamento verso il centro è un semplice transform
-       animabile, non un salto tra due modalità di posizionamento */
     .site-brand {
         position: fixed;
         top: var(--space-2);
         left: var(--space-2);
-        transform: translateX(0);
-        z-index: 2;
-        transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.3s ease;
+
+        z-index: 100;
+
+        transform: translate3d(0, 0, 0);
+
+        transition:
+                transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+                color 0.3s ease;
+
+        will-change: transform;
     }
 
+    /*
+     * Quando il menu è aperto:
+     * il nome si porta sopra il menu,
+     * al centro e leggermente più in basso.
+     */
     .site-header.nav-open .site-brand {
-        /* centra il proprio bordo sinistro sul centro dello schermo */
-        transform: translateX(calc(50vw - var(--space-2) - 50%));
+        z-index: 100;
+
+        transform:
+                translate3d(
+                        calc(50vw - var(--space-2) - 50%),
+                        1.5rem,
+                        0
+                );
+
         color: var(--fg);
+    }
+
+    /*
+     * Il menu rimane sotto al nome.
+     */
+    #site-nav {
+        z-index: 10;
+    }
+
+    /*
+     * Hamburger sopra al menu.
+     */
+    .nav-toggle {
+        z-index: 110;
     }
 
     .site-header.nav-open .nav-toggle {
@@ -483,15 +524,17 @@ body:not(:has(.home)) > section:first-of-type {
         gap: 0.75rem;
     }
     .site-header ul a {
-        font-size: 0.72rem;
+        font-size: 1rem;
         letter-spacing: 0.07em;
     }
     .site-header--home {
         --name-max: 1.6rem;
     }
     .site-subtitle {
-        left: 0.7rem;
-        font-size: 0.75rem;
+
+        font-size: 0.90rem;
+        top: 78%;
+
     }
 }
 
@@ -528,6 +571,8 @@ body:not(:has(.home)) > section:first-of-type {
         min-height: 100vh;
         padding-bottom: var(--space-3);
         background-position: center;
+        position: relative;
+        isolation: isolate;
     }
 }
 
@@ -545,6 +590,25 @@ body:not(:has(.home)) > section:first-of-type {
     pointer-events: none;
 }
 
+.home::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 18rem;
+
+    background: linear-gradient(
+            to bottom,
+            rgba(11, 10, 9, 0) 0%,
+            rgba(11, 10, 9, 0.25) 55%,
+            rgba(11, 10, 9, 0.65) 75%,
+            var(--bg) 100%
+    );
+
+    pointer-events: none;
+    z-index: 1;
+}
 /* ---------- Freccia "scorri" ---------- */
 .forward {
     position: relative;
@@ -582,11 +646,6 @@ body:not(:has(.home)) > section:first-of-type {
 /* =========================================================
    SEZIONE CATEGORIE — contact sheet
    ========================================================= */
-
-.background-color {
-    height: 1px;
-    background: var(--line);
-}
 
 .categorie {
     position: relative;
@@ -723,10 +782,12 @@ body:not(:has(.home)) > section:first-of-type {
 @media (min-width: 721px) {
     .categorie-selector-button {
         font-size: clamp(2rem, 3.4vw, 2.9rem);
+        padding-left: 2rem;
+
     }
 
     .categorie-dropdown {
-        min-width: 100%;
+        min-width: 40%;
     }
 }
 
@@ -738,7 +799,7 @@ body:not(:has(.home)) > section:first-of-type {
     }
 
     .categorie-dropdown {
-        min-width: 100%;
+        min-width: 40%;
         width: max-content;
     }
 
@@ -780,20 +841,16 @@ body:not(:has(.home)) > section:first-of-type {
     transform: translateX(40px);
 }
 
-.categorie .content {
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 390px));
-    justify-content: center;
-    gap: var(--space-3);
-}
-
+.categorie .content,
 .categorie .ev-content {
     position: relative;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 390px));
-    justify-content: left;
+    justify-content: start;
     gap: var(--space-3);
+    padding-left: 2rem;
+    padding-top: 2rem;
+
 }
 
 /* ---------- Frecce di navigazione (mobile / carousel) ---------- */
@@ -826,7 +883,6 @@ body:not(:has(.home)) > section:first-of-type {
     background: #050505;
     transition: border-color 0.3s ease;
 }
-
 
 .image-primo-piano::after {
     position: absolute;
@@ -895,15 +951,13 @@ body:not(:has(.home)) > section:first-of-type {
 /* ---------- Etichetta sotto il fotogramma ---------- */
 .card-categorie > a:last-child {
     font-family: var(--font-body);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--muted);
 
     padding-left: 0.5rem;
 }
-
-
 
 /* =========================================================
    RESPONSIVE — CATEGORIE
@@ -917,6 +971,7 @@ body:not(:has(.home)) > section:first-of-type {
 
     .categorie {
         padding: var(--space-4) var(--space-2);
+
     }
 
     /* Stessa griglia per "Foto" e "Eventi e Commissioni" */
@@ -926,6 +981,8 @@ body:not(:has(.home)) > section:first-of-type {
         justify-content: stretch;
         gap: var(--space-2);
         width: 100%;
+        padding-left: 0rem;
+
     }
 
     /* Tutte le card hanno esattamente la stessa larghezza */
