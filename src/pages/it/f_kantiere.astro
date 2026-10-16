@@ -11,7 +11,7 @@ import NoRightClick from '../../components/no_right_click.astro';
 // in galleria, senza toccare questo file.
 const foto = Object.values(
     import.meta.glob<{ default: ImageMetadata }>(
-        '../../assets/categorie/Kantiere/*.{jpg,jpeg,JPG,JPEG,png}',
+        '../../assets/categorie/Kantiere/*.{jpg,jpeg,JPG,JPEG,png,webp}',
         { eager: true }
     )
 ).map((mod) => mod.default);
@@ -24,7 +24,7 @@ const foto = Object.values(
 
 <NoRightClick />
 
-<Gallery title="Kantiere">
+<Gallery title="Riapertura del Kantiere">
 
     <Fragment slot="foto">
         <div class="descrizione">
@@ -47,9 +47,9 @@ const foto = Object.values(
                             alt={`Kantiere ${i + 1}`}
                             height={800}
                             densities={[1, 1.5, 2]}
-                            formats={['avif', 'webp', 'jpeg']}
+                            formats={['avif', 'webp', 'jpeg', 'webp']}
                             loading={i < 2 ? 'eager' : 'lazy'}
-                            quality={75}
+                            quality={100}
                     />
                 </div>
         ))}
