@@ -216,9 +216,9 @@ span {
 
     flex: 0 0 auto;
 
-    width: 63vh;
+    width: 50vw;
 
-    height: 70vh;
+    height: 80vh;
 
     max-height: 700px;
 
@@ -226,14 +226,14 @@ span {
 
     content-visibility: auto;
 
-    contain-intrinsic-size:
+    /*contain-intrinsic-size:
             auto 700px;
-
+    */
     margin: 0;
 
     font-family: var(--font-body);
 
-    font-size: 1.2vw;
+    font-size: 1.2rem;
 
     line-height: 1.75;
 

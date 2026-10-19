@@ -658,7 +658,6 @@ body:not(:has(.home)) > section:first-of-type {
     align-items: baseline;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-bottom: var(--space-4);
 }
 
 /* =========================================================
@@ -845,10 +844,10 @@ body:not(:has(.home)) > section:first-of-type {
 .categorie .ev-content {
     position: relative;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 390px));
-    justify-content: start;
+    grid-template-columns: repeat(auto-fit, minmax(5vw, 20vw));
+    justify-content: center;
     gap: var(--space-3);
-    padding-left: 2rem;
+
     padding-top: 2rem;
 
 }
