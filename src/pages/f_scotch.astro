@@ -9,7 +9,7 @@ import NoRightClick from '../components/no_right_click.astro';
 
 const foto = Object.values(
     import.meta.glob<{ default: ImageMetadata }>(
-        '../../assets/categorie/Scotch/*.{jpg,jpeg,JPG,JPEG,png}',
+        '../assets/categorie/Scotch/*.{jpg,jpeg,JPG,JPEG,png}',
         { eager: true }
     )
 ).map((mod) => mod.default);
