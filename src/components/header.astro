@@ -8,30 +8,33 @@ const currentLanguage = isEnglish ? 'EN' : 'IT';
 
 // Calcola la pagina equivalente nell'altra lingua
 const getLanguagePath = (english: boolean) => {
-    const path = pathname.replace(/^\/(it|en)/, '');
+    // Rimuove il prefisso /en dalle pagine inglesi
+    const path = isEnglish
+        ? pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+        : pathname;
 
     if (english) {
-    // Italiano → Inglese
+        // Italiano → Inglese
         if (path === '/about') return '/en/about';
-    if (path === '/contatti') return '/en/contacts';
-    return `/en${path || '/'}`;
+        if (path === '/contatti') return '/en/contacts';
+
+        return `/en${path === '/' ? '/' : path}`;
     }
 
     // Inglese → Italiano
-    if (path === '/about') return '/it/about';
-    if (path === '/contacts') return '/it/contatti';
-    return `/it${path || '/'}`;
-    };
+    if (path === '/about') return '/about';
+    if (path === '/contacts') return '/contatti';
+
+    return path;
+};
 
 const italianPath = getLanguagePath(false);
 const englishPath = getLanguagePath(true);
 
 const isHome =
-pathname === '/' ||
-pathname === '/it' ||
-pathname === '/it/' ||
-pathname === '/en' ||
-pathname === '/en/';
+    pathname === '/' ||
+    pathname === '/en' ||
+    pathname === '/en/';
 ---
 
 <header
@@ -44,7 +47,7 @@ pathname === '/en/';
     <nav>
         <div class="site-brand">
             <a
-                    href={isEnglish ? '/en/' : '/it/'}
+                    href={isEnglish ? '/en/' : '/'}
                     class="site-name"
             >
                 Nico Bonanno
@@ -150,19 +153,19 @@ pathname === '/en/';
 
             <ul id="site-nav">
                 <li>
-                    <a href={isEnglish ? '/en/about' : '/it/about'}>
+                    <a href={isEnglish ? '/en/about' : '/about'}>
                         {isEnglish ? 'About' : 'Bio'}
                     </a>
                 </li>
 
                 <li>
-                    <a href={isEnglish ? '/en/#categories' : '/it/#categorie'}>
+                    <a href={isEnglish ? '/en/#categories' : '/#categorie'}>
                         {isEnglish ? 'Photos' : 'Foto'}
                     </a>
                 </li>
 
                 <li>
-                    <a href={isEnglish ? '/en/contacts' : '/it/contatti'}>
+                    <a href={isEnglish ? '/en/contacts' : '/contatti'}>
                         {isEnglish ? 'Contact' : 'Contatti'}
                     </a>
                 </li>
@@ -228,7 +231,6 @@ pathname === '/en/';
         document.getElementById('language-menu');
 
     if (languageSwitcher && languageToggle && languageMenu) {
-
         const closeLanguageMenu = () => {
             languageSwitcher.classList.remove('is-open');
             languageToggle.setAttribute('aria-expanded', 'false');
@@ -253,9 +255,7 @@ pathname === '/en/';
 
         document.addEventListener('click', (event) => {
             if (
-                !languageSwitcher.contains(
-                    event.target as Node
-                )
+                !languageSwitcher.contains(event.target as Node)
             ) {
                 closeLanguageMenu();
             }
@@ -322,4 +322,3 @@ pathname === '/en/';
     }
 </script>
     )}
-
