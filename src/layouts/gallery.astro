@@ -428,42 +428,53 @@ const { title } = Astro.props;
        FRECCE GALLERIA
        ========================================================= */
 
+
+    /* =========================================================
+       FRECCE GALLERIA
+       ========================================================= */
+
     if (prev && track) {
+        prev.addEventListener('click', (event) => {
+            event.preventDefault();
 
-        prev.addEventListener(
-            'click',
-            () => {
+            const atStart = track.scrollLeft <= 5;
 
-                track.scrollBy({
-                    left:
-                        -track.clientWidth *
-                        0.9,
+            if (atStart) {
+                track.scrollTo({
+                    left: track.scrollWidth,
                     behavior: 'smooth'
                 });
-
+            } else {
+                track.scrollBy({
+                    left: -track.clientWidth * 0.9,
+                    behavior: 'smooth'
+                });
             }
-        );
-
+        });
     }
-
 
     if (next && track) {
+        next.addEventListener('click', (event) => {
+            event.preventDefault();
 
-        next.addEventListener(
-            'click',
-            () => {
+            const atEnd =
+                track.scrollLeft + track.clientWidth >=
+                track.scrollWidth - 5;
 
-                track.scrollBy({
-                    left:
-                        track.clientWidth *
-                        0.9,
+            if (atEnd) {
+                track.scrollTo({
+                    left: 0,
                     behavior: 'smooth'
                 });
-
+            } else {
+                track.scrollBy({
+                    left: track.clientWidth * 0.9,
+                    behavior: 'smooth'
+                });
             }
-        );
-
+        });
     }
+
 
 
     /* =========================================================
@@ -665,108 +676,68 @@ const { title } = Astro.props;
                CAMBIO FOTO
                ================================================= */
 
-            function changeImage(
+
+            async function changeImage(
                 newIndex: number,
-                direction:
-                    'next' |
-                    'previous'
+                direction: 'next' | 'previous'
             ) {
-
-                if (animationRunning)
-                    return;
-
-
-                if (
-                    newIndex ===
-                    currentIndex
-                ) {
+                if (animationRunning || newIndex === currentIndex) {
                     return;
                 }
 
-
                 animationRunning = true;
 
+                const nextImage = galleryImages[newIndex];
+                const nextSrc = getFullSrc(nextImage);
+
+                // Precarica la nuova immagine prima di iniziare
+                // l'animazione, evitando il flash della precedente.
+                const preload = new Image();
+                preload.src = nextSrc;
+
+                try {
+                    await preload.decode();
+                } catch {
+                    // Se il browser non riesce a decodificarla,
+                    // procediamo comunque con il cambio.
+                }
 
                 const exitClass =
                     direction === 'next'
                         ? 'slide-out-left'
                         : 'slide-out-right';
 
-
                 const enterClass =
                     direction === 'next'
                         ? 'slide-in-right'
                         : 'slide-in-left';
 
+                // Fa uscire la foto corrente.
+                image.classList.add(exitClass);
 
-                image.classList.add(
-                    exitClass
-                );
+                window.setTimeout(() => {
+                    // La foto è ormai invisibile: sostituiamo la sorgente.
+                    currentIndex = newIndex;
+                    image.src = nextSrc;
+                    image.alt = nextImage.alt || '';
 
+                    image.classList.remove(exitClass);
+                    image.classList.add(enterClass);
 
-                setTimeout(
-                    () => {
+                    // Forza il browser a registrare lo stato iniziale
+                    // prima di avviare la transizione d'ingresso.
+                    void image.offsetWidth;
 
-                        currentIndex =
-                            newIndex;
+                    requestAnimationFrame(() => {
+                        image.classList.remove(enterClass);
 
-
-                        image.src =
-                            getFullSrc(
-                                galleryImages[
-                                    currentIndex
-                                    ]
-                            );
-
-
-                        image.alt =
-                            galleryImages[
-                                currentIndex
-                                ].alt || '';
-
-
-                        image.classList.remove(
-                            exitClass
-                        );
-
-
-                        image.classList.add(
-                            enterClass
-                        );
-
-
-                        requestAnimationFrame(
-                            () => {
-
-                                requestAnimationFrame(
-                                    () => {
-
-                                        image.classList.remove(
-                                            enterClass
-                                        );
-
-                                    }
-                                );
-
-                            }
-                        );
-
-
-                        setTimeout(
-                            () => {
-
-                                animationRunning =
-                                    false;
-
-                            },
-                            300
-                        );
-
-                    },
-                    250
-                );
-
+                        window.setTimeout(() => {
+                            animationRunning = false;
+                        }, 430);
+                    });
+                }, 320);
             }
+
 
 
             function showNext() {

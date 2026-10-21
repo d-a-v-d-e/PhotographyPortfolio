@@ -14,31 +14,34 @@ const lang = 'it';
 <html lang={lang}>
 <NoRightClick />
 <head>
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nico Bonanno</title>
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href={`${base}favicon.ico`} />
+
     <style>
         .home {
             background-image: url('/indexbgimg2.JPG');
             background-size: cover;
             background-repeat: no-repeat;
+        }
 
+        section .forward a::before {
+            content: url('/icons8-freccia-espandi-52.png');
         }
     </style>
 </head>
+
 <body>
-
 <section class="home">
-
     <Header />
-    <div class="forward"><a href="#categorie"></a></div>
-    <style> section .forward a::before{
-        content: url(/icons8-freccia-espandi-52.png);
-    }</style>
+    <div class="forward">
+        <a href="#categorie" aria-label="Vai alle categorie"></a>
+    </div>
 </section>
+
 <div class="background-color"></div>
+
 <section class="categorie" id="categorie">
     <div class="categorie-header">
         <div class="categorie-selector" id="categorie-selector">
@@ -89,75 +92,297 @@ const lang = 'it';
                         data-category="eventi"
                         role="option"
                         aria-selected="false"
-
                 >
                     Eventi e Commissioni
                 </button>
-
             </div>
         </div>
     </div>
 
     <div class="categorie-panels categorie-content">
-        <div class="content" id="foto-content" role="tabpanel" aria-labelledby="foto-tab">
-            <a class="ca-next"></a>
-            <a class="ca-prev"></a>
+        <!-- PANNELLO FOTO -->
+        <div
+                class="content category-panel"
+                id="foto-content"
+                role="tabpanel"
+                aria-labelledby="categorie-selector-button"
+        >
+            <button
+                    type="button"
+                    class="ca-prev"
+                    aria-label="Categorie precedenti"
+            >
+                <span aria-hidden="true"></span>
+            </button>
 
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href=/f_colors> <img src="/categorie/colors.jpg" alt="Foto a colori" width="400" height="500"></a>
+            <div class="category-track">
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_colors">
+                            <img
+                                    src="/categorie/colors.jpg"
+                                    alt="Foto a colori"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_colors">Colori</a>
                 </div>
-                <a href="/f_colors">colori</a>
+
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_b&w">
+                            <img
+                                    src="/categorie/blackwhite.JPG"
+                                    alt="Foto in bianco e nero"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_b&w">Bianco e nero</a>
+                </div>
+
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_concepts">
+                            <img
+                                    src="/categorie/concepts.jpg"
+                                    alt="Foto concept"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_concepts">Concepts</a>
+                </div>
+
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_edited">
+                            <img
+                                    src="/categorie/edited.jpg"
+                                    alt="Fotografie elaborate"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_edited">?</a>
+                </div>
             </div>
 
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href=/f_b&w> <img src="/categorie/blackwhite.JPG" alt="Foto bianco e nero" width="400" height="500"></a>
-                </div>
-                <a href="/f_b&w">Bianco e nero</a>
-            </div>
-
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href=/f_concepts> <img src="/categorie/concepts.jpg" alt="Foto Concept" width="400" height="500"></a>
-                </div>
-                <a href="/f_concepts">Concepts</a>
-            </div>
-
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href=/f_edited> <img src="/categorie/edited.jpg" alt="boh" width="400" height="500"></a>
-                </div>
-                <a href="/f_edited">?</a>
-            </div>
+            <button
+                    type="button"
+                    class="ca-next"
+                    aria-label="Categorie successive"
+            >
+                <span aria-hidden="true"></span>
+            </button>
         </div>
 
+        <!-- PANNELLO EVENTI E COMMISSIONI -->
         <div
-                class="ev-content categorie-content"
+                class="ev-content categorie-content category-panel"
                 id="eventi-content"
                 role="tabpanel"
-                aria-labelledby="eventi-tab"
+                aria-labelledby="categorie-selector-button"
                 style="display: none;"
         >
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href="/f_scotch"> <img src="/categorie/scotch.jpg" alt="Foto Scotch" width="400" height="500"></a>
+            <button
+                    type="button"
+                    class="ca-prev"
+                    aria-label="Categorie precedenti"
+            >
+                <span aria-hidden="true"></span>
+            </button>
+
+            <div class="category-track">
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_scotch">
+                            <img
+                                    src="/categorie/scotch.jpg"
+                                    alt="Foto Scotch"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_scotch">Scotch</a>
                 </div>
-                <a href="/f_scotch">Scotch</a>
+
+                <div class="card-categorie">
+                    <div class="image-primo-piano">
+                        <a href="/f_kantiere">
+                            <img
+                                    src="/categorie/kantiere.jpg"
+                                    alt="Riapertura del Kantiere"
+                                    width="400"
+                                    height="500"
+                            />
+                        </a>
+                    </div>
+                    <a href="/f_kantiere">Riapertura del Kantiere</a>
+                </div>
             </div>
 
-            <div class="card-categorie">
-                <div class="image-primo-piano">
-                    <a href="/f_kantiere"> <img src="/categorie/kantiere.jpg" alt="Foto Kantiere" width="400" height="500"></a>
-                </div>
-                <a href="/f_kantiere"> Riapertura del Kantiere</a>
-            </div>
+            <button
+                    type="button"
+                    class="ca-next"
+                    aria-label="Categorie successive"
+            >
+                <span aria-hidden="true"></span>
+            </button>
         </div>
     </div>
 </section>
+
 <Footer />
 </body>
 </html>
+
+<style>
+    /* Layout dei pannelli e scorrimento orizzontale desktop */
+    @media (min-width: 721px) {
+
+        .categorie .category-panel > .ca-prev,
+        .categorie .category-panel > .ca-next {
+            display: none;
+        }
+
+        .categorie .category-panel.has-overflow > .ca-prev,
+        .categorie .category-panel.has-overflow > .ca-next {
+            display: flex;
+        }
+
+
+        .categorie .category-panel {
+            position: relative;
+            display: block;
+            overflow: visible;
+            padding: 2rem 0;
+        }
+
+        .categorie .category-track {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: flex-start;
+            gap: var(--space-3);
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+            scrollbar-width: none;
+            justify-content: center;
+        }
+
+        .categorie .category-panel.has-overflow .category-track {
+            justify-content: flex-start;
+        }
+
+        .categorie .category-track::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categorie .category-track > .card-categorie {
+            flex: 0 0 clamp(220px, 25vw, 340px);
+            width: auto;
+            min-width: 0;
+            scroll-snap-align: start;
+        }
+
+        .categorie .category-track .image-primo-piano img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+        }
+
+        .categorie .category-panel > .ca-prev,
+        .categorie .category-panel > .ca-next {
+            position: absolute;
+            z-index: 5;
+            top: 50%;
+
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            border: 1px solid rgb(255 255 255 / 35%);
+            border-radius: 50%;
+            background: rgb(0 0 0 / 55%);
+            color: white;
+            cursor: pointer;
+            transform: translateY(-50%);
+            transition: background 0.2s ease;
+        }
+
+        .categorie .category-panel > .ca-prev {
+            left: 12px;
+        }
+
+        .categorie .category-panel > .ca-next {
+            right: 12px;
+        }
+
+        .categorie .category-panel > .ca-prev:hover,
+        .categorie .category-panel > .ca-next:hover {
+            background: rgb(0 0 0 / 85%);
+        }
+
+        .categorie .category-panel > .ca-prev span::before,
+        .categorie .category-panel > .ca-next span::before {
+            display: block;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+            content: '';
+        }
+
+        .categorie .category-panel > .ca-prev span::before {
+            transform: rotate(-135deg);
+        }
+
+        .categorie .category-panel > .ca-next span::before {
+            transform: rotate(45deg);
+        }
+    }
+
+    /* Su mobile rimane la griglia a due colonne */
+    @media (max-width: 720px) {
+        .categorie .category-panel > .ca-prev,
+        .categorie .category-panel > .ca-next {
+            display: none;
+        }
+
+        .categorie .category-track {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--space-2);
+            width: 100%;
+        }
+
+        .categorie .category-track > .card-categorie {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .categorie .category-track .image-primo-piano img {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+        }
+    }
+
+</style>
 
 <script>
     const selector = document.getElementById('categorie-selector');
@@ -165,24 +390,106 @@ const lang = 'it';
     const selectedLabel = document.getElementById('categorie-selected');
     const dropdown = document.getElementById('categorie-dropdown');
 
-    const panels = document.querySelectorAll<HTMLElement>('.categorie-content');
-    const options = document.querySelectorAll<HTMLButtonElement>('.categorie-option');
+    const options = document.querySelectorAll<HTMLButtonElement>(
+        '.categorie-option'
+    );
+
+    const categoryPanels = [
+        document.querySelector<HTMLElement>('#foto-content'),
+        document.querySelector<HTMLElement>('#eventi-content')
+    ];
+
+    const updatePanelOverflow = (panel: HTMLElement) => {
+        const track = panel.querySelector<HTMLElement>('.category-track');
+        if (!track) return;
+
+        const hasOverflow = track.scrollWidth > track.clientWidth + 2;
+        panel.classList.toggle('has-overflow', hasOverflow);
+
+        if (!hasOverflow) {
+            track.scrollLeft = 0;
+        }
+    };
+
+    /* FRECCE: scorrimento ciclico come nella galleria */
+    categoryPanels.forEach((panel) => {
+        if (!panel) return;
+
+        const track = panel.querySelector<HTMLElement>('.category-track');
+        const prev = panel.querySelector<HTMLButtonElement>('.ca-prev');
+        const next = panel.querySelector<HTMLButtonElement>('.ca-next');
+
+        if (!track || !prev || !next) return;
+
+        const updateOverflow = () => updatePanelOverflow(panel);
+
+        prev.addEventListener('click', () => {
+            const atStart = track.scrollLeft <= 5;
+
+            if (atStart) {
+                track.scrollTo({
+                    left: track.scrollWidth - track.clientWidth,
+                    behavior: 'smooth'
+                });
+            } else {
+                track.scrollBy({
+                    left: -track.clientWidth * 0.2,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        next.addEventListener('click', () => {
+            const atEnd =
+                track.scrollLeft + track.clientWidth >=
+                track.scrollWidth - 5;
+
+            if (atEnd) {
+                track.scrollTo({
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            } else {
+                track.scrollBy({
+                    left: track.clientWidth * 0.2,
+                    behavior: 'smooth'
+                });
+            }
+        });
+
+        // Ricalcola quando cambiano le dimensioni del contenitore
+        const resizeObserver = new ResizeObserver(updateOverflow);
+        resizeObserver.observe(track);
+
+        window.addEventListener('resize', updateOverflow);
+        window.addEventListener('load', updateOverflow);
+
+        track.querySelectorAll('img').forEach((img) => {
+            img.addEventListener('load', updateOverflow);
+            img.addEventListener('error', updateOverflow);
+        });
+
+        updateOverflow();
+    });
+
+    type CategoryId = 'foto' | 'eventi';
 
     type Category = {
         label: string;
         content: HTMLElement;
     };
 
-    type CategoryId = 'foto' | 'eventi';
+    const fotoContent = document.getElementById('foto-content');
+    const eventiContent = document.getElementById('eventi-content');
 
     const categories: Record<CategoryId, Category> = {
         foto: {
             label: 'Foto',
-            content: document.getElementById('foto-content') as HTMLElement
+            content: fotoContent as HTMLElement
         },
         eventi: {
             label: 'Eventi e Commissioni',
-            content: document.getElementById('eventi-content') as HTMLElement
+            content: eventiContent as HTMLElement
         }
     };
 
@@ -193,7 +500,9 @@ const lang = 'it';
         selector &&
         selectorButton &&
         selectedLabel &&
-        dropdown
+        dropdown &&
+        fotoContent &&
+        eventiContent
     ) {
         const closeDropdown = () => {
             selector.classList.remove('is-open');
@@ -212,15 +521,15 @@ const lang = 'it';
             showClass: string
         ): void => {
             animating = true;
-
             hide.classList.add(hideClass);
 
-            setTimeout(() => {
+            window.setTimeout(() => {
                 hide.style.display = 'none';
                 hide.classList.remove(hideClass);
 
-                show.style.display = 'grid';
+                show.style.display = 'block';
                 show.classList.add(showClass);
+
 
                 requestAnimationFrame(() => {
                     requestAnimationFrame(() => {
@@ -237,30 +546,17 @@ const lang = 'it';
             const selectedCategory = categories[category];
             const currentCategory = categories[current];
 
-            if (!selectedCategory) return;
-
-            /*
-             * Chiude SEMPRE il dropdown quando viene
-             * selezionata una voce.
-             */
             closeDropdown();
 
-            if (category === current) {
-                return;
-            }
+            if (category === current) return;
 
             current = category;
-
             selectedLabel.textContent = selectedCategory.label;
 
-            options.forEach((option: HTMLButtonElement) => {
-                const isSelected =
-                    option.dataset.category === category;
+            options.forEach((option) => {
+                const isSelected = option.dataset.category === category;
 
-                option.setAttribute(
-                    'aria-selected',
-                    String(isSelected)
-                );
+                option.setAttribute('aria-selected', String(isSelected));
             });
 
             if (category === 'eventi') {
@@ -280,10 +576,7 @@ const lang = 'it';
             }
         };
 
-        /* =========================
-           APERTURA / CHIUSURA DROPDOWN
-           ========================= */
-
+        /* APERTURA E CHIUSURA MENU */
         selectorButton.addEventListener('click', (event) => {
             event.stopPropagation();
 
@@ -294,48 +587,33 @@ const lang = 'it';
             }
         });
 
-        /* =========================
-           SELEZIONE CATEGORIA
-           ========================= */
-
-        options.forEach((option: HTMLButtonElement) => {
+        /* SELEZIONE CATEGORIA */
+        options.forEach((option) => {
             option.addEventListener('click', (event) => {
                 event.stopPropagation();
 
-                const category =
-                    option.dataset.category as CategoryId;
+                const category = option.dataset.category as CategoryId;
 
-                if (category) {
+                if (category === 'foto' || category === 'eventi') {
                     selectCategory(category);
                 }
             });
         });
 
-        /* =========================
-           CLICK FUORI
-           ========================= */
-
+        /* CHIUSURA CLICCANDO FUORI */
         document.addEventListener('click', (event: MouseEvent) => {
             const target = event.target;
 
-            if (
-                target instanceof Node &&
-                !selector.contains(target)
-            ) {
+            if (target instanceof Node && !selector.contains(target)) {
                 closeDropdown();
             }
         });
 
-        /* =========================
-           ESC
-           ========================= */
-
+        /* CHIUSURA CON ESC */
         document.addEventListener('keydown', (event: KeyboardEvent) => {
             if (event.key === 'Escape') {
                 closeDropdown();
             }
         });
-
-
     }
 </script>

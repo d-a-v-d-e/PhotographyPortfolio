@@ -558,7 +558,7 @@ body:not(:has(.home)) > section:first-of-type {
 /* Su schermi stretti (spesso in verticale) l'inquadratura
    verticale della foto conta di più: la teniamo più in alto
    per non tagliare il soggetto */
-@media (max-width: 720px) {
+@media (max-width: 1000px){
     .home {
         background-position: 80% top;
     }
@@ -976,7 +976,7 @@ body:not(:has(.home)) > section:first-of-type {
     /* Stessa griglia per "Foto" e "Eventi e Commissioni" */
     .categorie .content,
     .categorie .ev-content {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(1, minmax(0, 1fr));
         justify-content: stretch;
         gap: var(--space-2);
         width: 100%;
@@ -1000,4 +1000,45 @@ body:not(:has(.home)) > section:first-of-type {
         aspect-ratio: 4 / 5;
         object-fit: cover;
     }
+
+
 }
+
+
+/* Sottocategorie su una singola riga, solo desktop */
+@media (min-width: 721px) {
+    #foto-content,
+    #eventi-content {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        scroll-behavior: smooth;
+        scroll-snap-type: x proximity;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    #foto-content::-webkit-scrollbar,
+    #eventi-content::-webkit-scrollbar {
+        display: none;
+    }
+
+    #foto-content .card-categorie,
+    #eventi-content .card-categorie {
+        flex: 0 0 clamp(220px, 25vw, 340px);
+        min-width: 0;
+        scroll-snap-align: start;
+    }
+
+    #foto-content .card-categorie img,
+    #eventi-content .card-categorie img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+}
+

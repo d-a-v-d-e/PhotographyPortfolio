@@ -1,29 +1,55 @@
 ---
 import '../../styles/global.css';
 import '../../styles/about.css';
+import Footer from '../../components/footer.astro';
 import Layout from '../../layouts/layout.astro';
 ---
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bio</title>
 
+</head>
+
+<Layout>
 
     <main class="about-page">
-        <Layout>
         <div class="about-grid">
+
             <div class="img_about">
-                <img src="/foto_about.jpg" alt="Ritratto di Nico Bonanno" width="500" height="500" />
+                <img
+                        src="/foto_about.jpg"
+                        alt="Ritratto di Nico Bonanno"
+                        width="500"
+                        height="500"
+                />
             </div>
 
             <div class="bio">
                 <p>
-                    Nato, cresciuto e tutt'ora a Novara, cresco trovando nelle arti visive una grande passione.
-                    Appassionato di cinema e fotografia in particolare mi approccio alla seconda seriamente durante le superiori.
-                    Inizio a scattare con la D5000 della madre, per poi più avanti spostarmi su una X-T50.<br><br>
+                    Born, raised, and still living in Novara, I grew up discovering a deep passion for the visual arts.
+                    Particularly drawn to cinema and photography, I began taking the latter seriously during high school.
+                    I started shooting with my mother's Nikon D5000, eventually moving on to a Fujifilm X-T50.<br><br>
 
-                    In contemporanea trovo nell'associazionismo politico e sociale una casa, col tempo diventando
-                    anche fotografo volontario per progetti ed eventi di Sermais e Libera Novara, di cui faccio parte attivamente.<br><br>
+                    At the same time, I found a sense of belonging in political and social activism,
+                    eventually becoming a volunteer photographer for projects and events organised by Sermais and Libera Novara,
+                    both of which I am actively involved in.<br><br>
 
-                    Ad oggi porto avanti questa passione col sogno di continuare a sperimentare e ad imparare, e non mi esclude nulla dal futuro.
+                    Today, I continue to pursue this passion, driven by the desire to keep experimenting and learning. I remain open to every possibility the future may bring.
                 </p>
             </div>
+
         </div>
-        </Layout>
+
+        <div class="about-credits">
+            <p>
+                Website developed by Davide Lanza.<br/>
+                Epoch Font by Junhan Sim<br/>
+                © Nico Bonanno
+            </p>
+        </div>
+
     </main>
+
+</Layout>
+

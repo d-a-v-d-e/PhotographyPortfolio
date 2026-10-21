@@ -1,0 +1,58 @@
+---
+import '../../styles/global.css';
+import '../../styles/gallery.css';
+
+import Gallery from '../../layouts/gallery.astro';
+import { Picture } from 'astro:assets';
+import NoRightClick from '../../components/no_right_click.astro';
+
+// Importa automaticamente tutte le foto della cartella —
+// aggiungerne una nuova qui dentro basta a farla comparire
+// in galleria, senza toccare questo file.
+const foto = Object.values(
+    import.meta.glob<{ default: ImageMetadata }>(
+        '../../assets/categorie/Kantiere/*.{jpg,jpeg,JPG,JPEG,png,webp}',
+        { eager: true }
+    )
+).map((mod) => mod.default);
+---
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kantiere Reopening</title>
+</head>
+
+<NoRightClick />
+
+<Gallery title="Kantiere Reopening">
+
+    <Fragment slot="foto">
+        <div class="descrizione">
+            <a class="specifica">2026 • EVENT</a>
+            <div class="visual">
+
+            <a>Kantiere is a youth center located in Verbania, run by various local organizations that host events and provide spaces for people to bring their ideas to life.<br><br>
+                Renovation work began in early 2026 and was completed with an inauguration party held on September 12, 2026.<br>
+
+            </a>
+            </div>
+        </div>
+        {foto.map((img, i) => (
+
+                <div class="foto_gallery">
+
+                    <div class="image-placeholder"></div>
+
+                    <Picture
+                            src={img}
+                            alt={`Kantiere ${i + 1}`}
+                            height={800}
+                            densities={[1, 1.5, 2]}
+                            formats={['avif', 'webp', 'jpeg', 'webp']}
+                            loading={i < 2 ? 'eager' : 'lazy'}
+                            quality={100}
+                    />
+                </div>
+        ))}
+    </Fragment>
+</Gallery>
