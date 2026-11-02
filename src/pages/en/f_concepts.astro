@@ -6,15 +6,22 @@ import Gallery from '../../layouts/gallery.astro';
 import { Picture } from 'astro:assets';
 import NoRightClick from '../../components/no_right_click.astro';
 
-// Importa automaticamente tutte le foto della cartella —
-// aggiungerne una nuova qui dentro basta a farla comparire
-// in galleria, senza toccare questo file.
-const foto = Object.values(
-    import.meta.glob<{ default: ImageMetadata }>(
-        '../../assets/categorie/Concepts/*.{jpg,jpeg,JPG,JPEG,png}',
-        { eager: true }
-    )
-).map((mod) => mod.default);
+
+const moduliFoto = import.meta.glob<{ default: ImageMetadata }>(
+    '../../assets/categorie/Concepts/*.{jpg,jpeg,JPG,JPEG,png,webp}',
+    { eager: true }
+);
+
+const foto = Object.entries(moduliFoto)
+    .sort(([a], [b]) => {
+        const nomeA = a.split('/').pop()!;
+        const nomeB = b.split('/').pop()!;
+
+        return nomeA.localeCompare(nomeB, undefined, {
+            numeric: true,
+            sensitivity: 'base'
+        });
+    });
 ---
 <head>
     <meta charset="UTF-8" />
@@ -26,13 +33,14 @@ const foto = Object.values(
 <NoRightClick />
 <Gallery title="Concepts">
     <Fragment slot="foto">
-        {foto.map((img, i) => (
-                <div class="foto_gallery">
+        {foto.map(([path, mod], i) => (
+                <div class="foto_gallery" style="position: relative;">
+
 
                     <div class="image-placeholder"></div>
 
                     <Picture
-                            src={img}
+                            src={mod.default}
                             alt={`Concepts ${i + 1}`}
                             height={800}
                             densities={[1, 1.5, 2]}
@@ -40,6 +48,7 @@ const foto = Object.values(
                             loading={i < 2 ? 'eager' : 'lazy'}
                             quality={100}
                     />
+
                 </div>
         ))}
     </Fragment>
