@@ -14,16 +14,11 @@ const getLanguagePath = (english: boolean) => {
         : pathname;
 
     if (english) {
-        // Italiano → Inglese
-        if (path === '/about') return '/en/about';
-        if (path === '/contatti') return '/en/contacts';
 
         return `/en${path === '/' ? '/' : path}`;
     }
 
     // Inglese → Italiano
-    if (path === '/about') return '/about';
-    if (path === '/contacts') return '/contatti';
 
     return path;
 };
@@ -165,7 +160,7 @@ const isHome =
                 </li>
 
                 <li>
-                    <a href={isEnglish ? '/en/contacts' : '/contatti'}>
+                    <a href={isEnglish ? '/en/contacts' : '/contacts'}>
                         {isEnglish ? 'Contact' : 'Contatti'}
                     </a>
                 </li>
