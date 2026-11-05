@@ -37,7 +37,7 @@
 .bio p {
     margin: 0;
     font-family: var(--font-body);
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     line-height: 1.75;
     color: var(--fg);
     max-width: 62ch;
@@ -129,7 +129,7 @@
     }
 
     .bio p {
-        font-size: 1.8vw;
+        font-size: 1.6vw;
         justify-self: center;
         text-shadow: 2px 2px 2px black;
     }
