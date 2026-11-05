@@ -7,8 +7,21 @@ import Layout from '../layouts/layout.astro';
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bio</title>
+    <title>Bio | Nico Bonanno</title>
 
+    <link
+            rel="preload"
+            as="image"
+            href="/about_bg.jpg"
+            fetchpriority="high"
+    />
+
+    <link
+            rel="preload"
+            as="image"
+            href="/foto_about.jpg"
+            fetchpriority="high"
+    />
 </head>
 
 <Layout>
@@ -27,6 +40,8 @@ import Layout from '../layouts/layout.astro';
                         alt="Ritratto di Nico Bonanno"
                         width="500"
                         height="500"
+                        loading="eager"
+                        fetchpriority="high"
                 />
             </div>
 
