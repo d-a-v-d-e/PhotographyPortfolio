@@ -127,4 +127,4 @@ Le fotografie e tutti i contenuti visivi presenti nel sito appartengono al rispe
 ---
 ### 🔎 Visualizzazione sito
 
-Una volta finito, il progetto sarà visibile pubblicamente online
+[**Nico Bonanno – Photography Portfolio**](https://nicobonanno.eu)
